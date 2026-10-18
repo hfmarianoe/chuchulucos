@@ -7,12 +7,23 @@
     <meta name="description" content="Editor y depurador paso a paso de C para estudiantes.">
     <!-- Cargar el intérprete (ya existente) -->
     <script src="interp.js"></script>
+    <script>
+        // Tema guardado: se aplica antes de pintar. Si localStorage no está disponible, manda el tema del sistema.
+        try {
+            const temaGuardado = localStorage.getItem('chuchulucos-tema');
+            if (temaGuardado === 'light' || temaGuardado === 'dark') {
+                document.documentElement.setAttribute('data-theme', temaGuardado);
+            }
+        } catch (e) { /* sin acceso a localStorage: se usa el tema del sistema */ }
+    </script>
     <style>
         :root {
+            color-scheme: light dark;
             --bg-color: #ffffff;
             --text-color: #000;
             --panel-bg: #f5f5f5;
             --accent: #007acc;
+            --accent-text: #005a9e;
             --highlight-bg: rgba(0,122,204,0.1);
             --error-bg: #ffdddd;
             --error-line-bg: #ffcccc;
@@ -20,13 +31,20 @@
             --gutter-color: #555;
             --var-chip-bg: #ddd;
             --var-chip-bg-changed: #ffecb3;
+            --border: #ccc;
+            --control-bg: #ffffff;
+            --control-border: #aaa;
+            --warn: #a35f00;
+            --danger: #c62828;
         }
         @media (prefers-color-scheme: dark) {
-            :root {
+            :root:not([data-theme="light"]) {
+                color-scheme: dark;
                 --bg-color: #1e1e1e;
                 --text-color: #d4d4d4;
                 --panel-bg: #252525;
                 --accent: #4daafc;
+                --accent-text: #4daafc;
                 --highlight-bg: rgba(77,170,252,0.2);
                 --error-bg: #5a0000;
                 --error-line-bg: #5a0000;
@@ -34,7 +52,35 @@
                 --gutter-color: #aaa;
                 --var-chip-bg: #333;
                 --var-chip-bg-changed: #665c00;
+                --border: #444;
+                --control-bg: #333;
+                --control-border: #666;
+                --warn: #e0a000;
+                --danger: #ef5350;
             }
+        }
+        :root[data-theme="light"] {
+            color-scheme: light;
+        }
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --bg-color: #1e1e1e;
+            --text-color: #d4d4d4;
+            --panel-bg: #252525;
+            --accent: #4daafc;
+            --accent-text: #4daafc;
+            --highlight-bg: rgba(77,170,252,0.2);
+            --error-bg: #5a0000;
+            --error-line-bg: #5a0000;
+            --gutter-bg: #2d2d2d;
+            --gutter-color: #aaa;
+            --var-chip-bg: #333;
+            --var-chip-bg-changed: #665c00;
+            --border: #444;
+            --control-bg: #333;
+            --control-border: #666;
+            --warn: #e0a000;
+            --danger: #ef5350;
         }
 
         * {
@@ -75,7 +121,7 @@
             display: flex;
             gap: 8px;
             padding: 8px;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid var(--border);
             align-items: center;
         }
         .capacity {
@@ -84,7 +130,7 @@
             gap: 8px;
             padding: 4px 8px;
             font-size: 0.85em;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid var(--border);
         }
         .capacity.full #capacity-text { font-weight: bold; }
         .capacity-bar {
@@ -100,31 +146,32 @@
             background: var(--accent);
             transition: width 0.15s;
         }
-        #capacity-fill.warn { background: #e0a000; }
-        #capacity-fill.full { background: #c62828; }
+        #capacity-fill.warn { background: var(--warn); }
+        #capacity-fill.full { background: var(--danger); }
         #steps-fill {
             height: 100%;
             width: 0;
             background: var(--accent);
             transition: width 0.15s;
         }
-        #steps-fill.warn { background: #e0a000; }
-        #steps-fill.full { background: #c62828; }
+        #steps-fill.warn { background: var(--warn); }
+        #steps-fill.full { background: var(--danger); }
         #vars-fill, #anid-fill, #prof-fill {
             height: 100%;
             width: 0;
             background: var(--accent);
             transition: width 0.15s;
         }
-        #vars-fill.warn, #anid-fill.warn, #prof-fill.warn { background: #e0a000; }
-        #vars-fill.full, #anid-fill.full, #prof-fill.full { background: #c62828; }
+        #vars-fill.warn, #anid-fill.warn, #prof-fill.warn { background: var(--warn); }
+        #vars-fill.full, #anid-fill.full, #prof-fill.full { background: var(--danger); }
         .editor-bar button {
             padding: 4px 8px;
             font-size: 0.9em;
             cursor: pointer;
-            border: 1px solid #aaa;
+            border: 1px solid var(--control-border);
             border-radius: 4px;
-            background: #fff;
+            background: var(--control-bg);
+            color: var(--text-color);
         }
         .editor-bar .speed-control {
             margin-left: auto;
@@ -233,7 +280,7 @@
             align-items: center;
             gap: 12px;
             padding: 8px;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid var(--border);
         }
         #counter {
             font-weight: bold;
@@ -250,7 +297,7 @@
         }
         #output {
             background: var(--panel-bg);
-            border: 1px solid #ccc;
+            border: 1px solid var(--border);
             padding: 8px;
             overflow-x: auto;
             font-family: monospace;
@@ -267,7 +314,7 @@
         .var-group-title {
             font-weight: bold;
             margin-bottom: 4px;
-            color: var(--accent);
+            color: var(--accent-text);
         }
         .var-group.current > .var-group-title {
             text-decoration: underline;
@@ -313,6 +360,7 @@
                 <label for="speed">Velocidad (ms):</label>
                 <input type="range" id="speed" min="50" max="1000" value="500">
             </div>
+            <button id="theme-btn" type="button" aria-pressed="false" aria-label="Tema oscuro">◐ Tema oscuro</button>
         </div>
         <div class="capacity">
             <span id="capacity-text"></span>
@@ -396,6 +444,32 @@
     const statusDisplay = document.getElementById('status');
     const varsDisplay = document.getElementById('vars');
     const errorDisplay = document.getElementById('error');
+
+    // Interruptor de tema: alterna data-theme en <html> y recuerda la elección si el navegador lo permite.
+    const themeBtn = document.getElementById('theme-btn');
+    const temaSistema = window.matchMedia('(prefers-color-scheme: dark)');
+    function temaEfectivo() {
+        const forzado = document.documentElement.getAttribute('data-theme');
+        if (forzado === 'light' || forzado === 'dark') return forzado;
+        return temaSistema.matches ? 'dark' : 'light';
+    }
+    function pintarTema() {
+        themeBtn.setAttribute('aria-pressed', String(temaEfectivo() === 'dark'));
+    }
+    themeBtn.addEventListener('click', () => {
+        const nuevo = temaEfectivo() === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', nuevo);
+        try {
+            localStorage.setItem('chuchulucos-tema', nuevo);
+        } catch (e) { /* sin persistencia: la elección dura solo esta visita */ }
+        pintarTema();
+    });
+    if (temaSistema.addEventListener) {
+        temaSistema.addEventListener('change', pintarTema);
+    } else {
+        temaSistema.addListener(pintarTema); // Safari anterior a 14
+    }
+    pintarTema();
 
     // Estado
     let sourceCode = '';
