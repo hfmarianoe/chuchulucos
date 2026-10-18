@@ -37,3 +37,65 @@ test('M5 las directivas #include y #define se siguen ignorando', () => {
   assert.strictEqual(r.ok, true, `falló: ${r.error}`);
   assert.strictEqual(r.output, 'ok\n');
 });
+
+// M6: el léxico avisa de lo que no se soporta, con la línea.
+test('M6 hexadecimal 0x da aviso explícito', () => {
+  const r = run(`int main(){\n    int x = 0x1F;\n    return 0;\n}`);
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Hexadecimales \(0x\) no soportados/);
+  assert.strictEqual(r.errorLine, 2);
+});
+
+test('M6 exponente 1e5 da aviso explícito', () => {
+  const r = run(`int main(){\n    double d = 1e5;\n    return 0;\n}`);
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Notación exponencial \(1e5\) no soportada/);
+  assert.strictEqual(r.errorLine, 2);
+});
+
+test('M6 exponente con signo 2.5E-3 da aviso explícito', () => {
+  const r = run(`int main(){ double d = 2.5E-3; return 0; }`);
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Notación exponencial/);
+});
+
+test('M6 sufijo f en 1.0f da aviso explícito', () => {
+  const r = run(`int main(){\n    float f = 1.0f;\n    return 0;\n}`);
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Sufijos \(1\.0f, 1L\) no soportados/);
+  assert.strictEqual(r.errorLine, 2);
+});
+
+test('M6 sufijo L en 1L da aviso explícito', () => {
+  const r = run(`int main(){ long x = 1L; return 0; }`);
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Sufijos/);
+});
+
+test('M6 long long da aviso explícito', () => {
+  const r = run(`int main(){\n    long long x = 1;\n    return 0;\n}`);
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /'long long' no soportado/);
+  assert.strictEqual(r.errorLine, 2);
+});
+
+test('M6 enum, typedef, sizeof y strlen dan aviso explícito', () => {
+  const casos = [
+    ['enum', `int main(){ enum c { R }; return 0; }`],
+    ['typedef', `typedef int entero;\nint main(){ return 0; }`],
+    ['sizeof', `int main(){ int n = sizeof(int); return 0; }`],
+    ['strlen', `int main(){ int n = strlen("ab"); return 0; }`],
+  ];
+  for (const [palabra, src] of casos) {
+    const r = run(src);
+    assert.strictEqual(r.ok, false, palabra);
+    assert.match(r.error, new RegExp(`'${palabra}' no soportado`), palabra);
+    assert.ok(r.errorLine, `${palabra} sin línea`);
+  }
+});
+
+test('M6 los números decimales y enteros normales siguen funcionando', () => {
+  const r = run(`int main(){ int x = 10; double d = 1.5; printf("%d %f\\n", x, d); return 0; }`);
+  assert.strictEqual(r.ok, true, `falló: ${r.error}`);
+  assert.strictEqual(r.output, '10 1.500000\n');
+});

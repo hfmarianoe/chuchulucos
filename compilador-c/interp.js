@@ -61,6 +61,14 @@
           let start = this.pos;
           while (this.pos < this.src.length && /[a-zA-Z0-9_]/.test(this.src[this.pos])) this.pos++;
           const word = this.src.slice(start, this.pos);
+
+          if (['enum', 'typedef', 'sizeof', 'strlen'].includes(word)) {
+            this.error(`'${word}' no soportado`);
+          }
+          if (word === 'long' && tokens.length > 0 && tokens[tokens.length - 1].type === 'keyword' && tokens[tokens.length - 1].value === 'long') {
+            this.error("'long long' no soportado");
+          }
+
           const keywords = new Set(['int','char','float','double','void','if','else','while','do','for','break','continue','return','const','static','long','unsigned','short','struct','switch']);
           tokens.push({ type: keywords.has(word) ? 'keyword' : 'identifier', value: word, line: this.line });
           continue;
@@ -70,12 +78,28 @@
           let start = this.pos;
           let isFloat = false;
           while (this.pos < this.src.length && /[0-9]/.test(this.src[this.pos])) this.pos++;
+
+          if (this.src.slice(start, this.pos) === '0' && this.pos < this.src.length && (this.src[this.pos] === 'x' || this.src[this.pos] === 'X')) {
+            this.error("Hexadecimales (0x) no soportados");
+          }
+
           if (this.pos < this.src.length && this.src[this.pos] === '.') {
             isFloat = true;
             this.pos++;
             while (this.pos < this.src.length && /[0-9]/.test(this.src[this.pos])) this.pos++;
           }
-          // exponent? not supported
+
+          if (this.pos < this.src.length && (this.src[this.pos] === 'e' || this.src[this.pos] === 'E')) {
+            let next = this.pos + 1;
+            if (next < this.src.length && (/[0-9]/.test(this.src[next]) || ( (this.src[next] === '+' || this.src[next] === '-') && next + 1 < this.src.length && /[0-9]/.test(this.src[next+1]) ))) {
+              this.error("Notación exponencial (1e5) no soportada");
+            }
+          }
+
+          if (this.pos < this.src.length && /[fFlLuU]/.test(this.src[this.pos])) {
+            this.error("Sufijos (1.0f, 1L) no soportados");
+          }
+
           const text = this.src.slice(start, this.pos);
           tokens.push({ type: 'number', value: isFloat ? parseFloat(text) : parseInt(text, 10), line: this.line, isFloat: isFloat });
           continue;
