@@ -110,6 +110,14 @@
         }
         #steps-fill.warn { background: #e0a000; }
         #steps-fill.full { background: #c62828; }
+        #vars-fill, #anid-fill, #prof-fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 0.15s;
+        }
+        #vars-fill.warn, #anid-fill.warn, #prof-fill.warn { background: #e0a000; }
+        #vars-fill.full, #anid-fill.full, #prof-fill.full { background: #c62828; }
         .editor-bar button {
             padding: 4px 8px;
             font-size: 0.9em;
@@ -318,6 +326,24 @@
                 <div id="steps-fill"></div>
             </div>
         </div>
+        <div class="capacity">
+            <span id="vars-text">0 / 20 variables</span>
+            <div class="capacity-bar" role="meter" aria-label="Variables declaradas" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0">
+                <div id="vars-fill"></div>
+            </div>
+        </div>
+        <div class="capacity">
+            <span id="anid-text">0 / 3 niveles de anidamiento</span>
+            <div class="capacity-bar" role="meter" aria-label="Niveles de anidamiento" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+                <div id="anid-fill"></div>
+            </div>
+        </div>
+        <div class="capacity">
+            <span id="prof-text">0 / 200 niveles de llamada</span>
+            <div class="capacity-bar" role="meter" aria-label="Profundidad de llamadas de la última ejecución" aria-valuemin="0" aria-valuemax="200" aria-valuenow="0">
+                <div id="prof-fill"></div>
+            </div>
+        </div>
         <div class="editor-body">
             <div id="gutter"></div>
             <pre id="code-display"></pre>
@@ -386,6 +412,9 @@
     // Código de ejemplo inicial
     // Tope de líneas: los programas de inicio son cortos.
     const MAX_LINEAS = 100;
+    const MAX_VARIABLES = 20;
+    const MAX_ANIDAMIENTO = 3;
+    const MAX_PROFUNDIDAD = 200;
     const capacityFill = document.getElementById('capacity-fill');
     const capacityText = document.getElementById('capacity-text');
     const stepsFill = document.getElementById('steps-fill');
@@ -428,6 +457,7 @@ int main() {
     sourceCode = sampleCode;
     ultimoCodigoValido = sampleCode;
     actualizarCapacidad();
+    actualizarMedidoresCodigo();
     // Actualizar numeración del editor inicialmente
     updateEditorDisplay();
 
@@ -441,6 +471,7 @@ int main() {
         }
         ultimoCodigoValido = code.value;
         actualizarCapacidad();
+        actualizarMedidoresCodigo();
         sourceCode = code.value;
         updateEditorDisplay();
         // invalidar traza cuando se modifica el código
@@ -477,6 +508,31 @@ int main() {
         hideError();
     }
 
+    // Pinta un medidor: valor usado frente a su tope, con el mismo color que las demás barras.
+    function pintarMedidor(id, valor, tope, texto) {
+        const fill = document.getElementById(id + '-fill');
+        const meter = fill.parentElement;
+        const usados = Math.min(valor, tope);
+        const proporcion = usados / tope;
+        fill.style.width = Math.round(proporcion * 100) + '%';
+        fill.className = usados >= tope ? 'full' : (proporcion >= 0.8 ? 'warn' : '');
+        document.getElementById(id + '-text').textContent = texto(usados);
+        meter.setAttribute('aria-valuenow', usados);
+        meter.setAttribute('aria-valuetext', texto(usados));
+    }
+
+    // Variables y anidamiento se miden al escribir; si el código aún no es válido, se mantiene el último resultado.
+    function actualizarMedidoresCodigo() {
+        let r;
+        try {
+            r = CInterp.analizar(code.value);
+        } catch (e) {
+            return;
+        }
+        pintarMedidor('vars', r.variables, MAX_VARIABLES, n => `${n} / ${MAX_VARIABLES} variables`);
+        pintarMedidor('anid', r.anidamiento, MAX_ANIDAMIENTO, n => `${n} / ${MAX_ANIDAMIENTO} niveles de anidamiento`);
+    }
+
     function mostrarPasos(pasos, limite) {
         const usados = Math.min(pasos, limite);
         const proporcion = usados / limite;
@@ -493,6 +549,7 @@ int main() {
         try {
             const result = CInterp.run(sourceCode);
             mostrarPasos(result.pasos || 0, result.limite || MAX_PASOS_DEFAULT);
+            pintarMedidor('prof', result.profundidad || 0, MAX_PROFUNDIDAD, n => `${n} / ${MAX_PROFUNDIDAD} niveles de llamada`);
             if (result.error) {
                 showError(result.error, result.errorLine);
                 steps = [];

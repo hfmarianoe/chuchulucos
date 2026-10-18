@@ -61,3 +61,10 @@ test('la barra de capacidad es un role=meter y el tope es de 100 líneas', () =>
   assert.match(html, /role="meter"[^>]*aria-valuemax="100"/);
   assert.match(html, /const MAX_LINEAS = 100;/);
 });
+
+// Medidores de variables, anidamiento y profundidad de llamadas.
+test('hay medidores de variables, anidamiento y profundidad con sus topes', () => {
+  assert.match(html, /role="meter"[^>]*aria-valuemax="20"[\s\S]*?id="vars-fill"/);
+  assert.match(html, /role="meter"[^>]*aria-valuemax="3"[\s\S]*?id="anid-fill"/);
+  assert.match(html, /role="meter"[^>]*aria-valuemax="200"[\s\S]*?id="prof-fill"/);
+});
