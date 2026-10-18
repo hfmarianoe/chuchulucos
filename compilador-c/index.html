@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Editor y Depurador C Educativo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Editor y depurador paso a paso de C para estudiantes.">
     <!-- Cargar el intérprete (ya existente) -->
     <script src="interp.js"></script>
     <style>
@@ -251,21 +252,23 @@
             margin: 8px;
             border-radius: 4px;
         }
-        .hidden { display: none; }
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hidden { display: none; }
     </style>
 </head>
 <body>
+<h1 class="sr-only">Editor y depurador de C</h1>
 
-<div class="container">
+<main class="container">
     <!-- Panel izquierdo: editor -->
     <div class="left" id="editor">
         <div class="editor-bar">
             <button id="run-btn" title="Ejecutar/Play">▶ Ejecutar</button>
-            <button id="play-btn" title="Play">▶| Play</button>
-            <button id="pause-btn" title="Pausar">⏸ Pausa</button>
-            <button id="prev-btn" title="Anterior">◀ Anterior</button>
-            <button id="next-btn" title="Siguiente">▶| Siguiente</button>
-            <button id="reset-btn" title="Reiniciar">⟲ Reiniciar</button>
+            <button id="play-btn" title="Reproducir" aria-label="Reproducir">⏵ Play</button>
+            <button id="pause-btn" title="Pausar" aria-label="Pausar">⏸ Pausa</button>
+            <button id="prev-btn" title="Anterior" aria-label="Paso anterior">◀ Anterior</button>
+            <button id="next-btn" title="Siguiente" aria-label="Paso siguiente">⏭ Siguiente</button>
+            <button id="reset-btn" title="Reiniciar" aria-label="Reiniciar">⟲ Reiniciar</button>
             <div class="speed-control">
                 <label for="speed">Velocidad (ms):</label>
                 <input type="range" id="speed" min="50" max="1000" value="500">
@@ -284,18 +287,19 @@
             <span id="counter"></span>
             <div id="current-line"></div>
         </div>
-        <pre id="output"></pre>
+        <pre id="output" aria-live="polite"></pre>
         <div id="vars"></div>
         <div id="error" class="hidden"></div>
     </div>
-</div>
+</main>
 
 <script>
     // Referencias DOM
     const code = document.getElementById('code');
     const gutter = document.getElementById('gutter');
     const codeDisplay = document.getElementById('code-display');
-    code.addEventListener('scroll', () => { gutter.scrollTop = code.scrollTop; codeDisplay.scrollTop = code.scrollTop; codeDisplay.scrollLeft = code.scrollLeft; });
+code.addEventListener('scroll', () => { gutter.scrollTop = code.scrollTop; codeDisplay.scrollTop = code.scrollTop; codeDisplay.scrollLeft = code.scrollLeft; });
+code.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); onRun(); } if (e.key === 'Tab') { e.preventDefault(); const s = code.selectionStart; code.value = code.value.slice(0, s) + '    ' + code.value.slice(code.selectionEnd); code.selectionStart = code.selectionEnd = s + 4; code.dispatchEvent(new Event('input')); } });
 
     const runBtn = document.getElementById('run-btn');
     const playBtn = document.getElementById('play-btn');
