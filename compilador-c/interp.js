@@ -1090,29 +1090,34 @@
     }
 
     executeFor(stmt) {
-      if (stmt.init) {
-        if (stmt.init.type === 'VarDecl') this.executeVarDecl(stmt.init);
-        else this.evalExpr(stmt.init.expr);
-      }
-      while (true) {
-        if (stmt.cond) {
-          this.recordStep(stmt.line); // condition evaluation step
-          const cond = this.evalExpr(stmt.cond);
-          if (!cond) break;
-        } else {
-          this.recordStep(stmt.line); // still record condition? spec says once per iteration
+      this.pushScope();
+      try {
+        if (stmt.init) {
+          if (stmt.init.type === 'VarDecl') this.executeVarDecl(stmt.init);
+          else this.evalExpr(stmt.init.expr);
         }
-        try {
-          this.executeStatement(stmt.body);
-        } catch (e) {
-          if (e instanceof BreakSignal) break;
-          if (e instanceof ContinueSignal) {
-            // continue goes to increment
-          } else throw e;
+        while (true) {
+          if (stmt.cond) {
+            this.recordStep(stmt.line); // condition evaluation step
+            const cond = this.evalExpr(stmt.cond);
+            if (!cond) break;
+          } else {
+            this.recordStep(stmt.line); // still record condition? spec says once per iteration
+          }
+          try {
+            this.executeStatement(stmt.body);
+          } catch (e) {
+            if (e instanceof BreakSignal) break;
+            if (e instanceof ContinueSignal) {
+              // continue goes to increment
+            } else throw e;
+          }
+          if (stmt.incr) {
+            this.evalExpr(stmt.incr);
+          }
         }
-        if (stmt.incr) {
-          this.evalExpr(stmt.incr);
-        }
+      } finally {
+        this.popScope();
       }
     }
 
