@@ -300,7 +300,7 @@
         </div>
         <div class="capacity">
             <span id="capacity-text"></span>
-            <div class="capacity-bar" role="meter" aria-label="Espacio para código" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0">
+            <div class="capacity-bar" role="meter" aria-label="Espacio para código" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                 <div id="capacity-fill"></div>
             </div>
         </div>
@@ -371,7 +371,7 @@
 
     // Código de ejemplo inicial
     // Tope de líneas: los programas de inicio son cortos.
-    const MAX_LINEAS = 40;
+    const MAX_LINEAS = 100;
     const capacityFill = document.getElementById('capacity-fill');
     const capacityText = document.getElementById('capacity-text');
     const capacityMeter = document.querySelector('.capacity-bar');

@@ -52,7 +52,7 @@ test('A4 showError no muestra línea nula', () => {
 });
 
 // Barra de capacidad: el editor tiene un tope de líneas y lo muestra como medidor.
-test('la barra de capacidad es un role=meter y el tope es de 40 líneas', () => {
-  assert.match(html, /role="meter"[^>]*aria-valuemax="40"/);
-  assert.match(html, /const MAX_LINEAS = 40;/);
+test('la barra de capacidad es un role=meter y el tope es de 100 líneas', () => {
+  assert.match(html, /role="meter"[^>]*aria-valuemax="100"/);
+  assert.match(html, /const MAX_LINEAS = 100;/);
 });
