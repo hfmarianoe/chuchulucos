@@ -1,0 +1,39 @@
+const test = require('node:test');
+const assert = require('node:assert');
+const { run } = require('../compilador-c/interp.js');
+
+const salida = (codigo) => {
+  const r = run(codigo);
+  assert.strictEqual(r.ok, true, r.error);
+  return r.output;
+};
+
+test('printf acepta un código de carácter numérico como formato', () => {
+  assert.strictEqual(salida('int main(){ printf(65); return 0; }'), 'A');
+});
+
+test('printf acepta una variable de tipo char como formato', () => {
+  assert.strictEqual(salida('int main(){ char c = 66; printf(c); return 0; }'), 'B');
+});
+
+test('printf acepta un arreglo de caracteres como formato', () => {
+  assert.strictEqual(salida('int main(){ char s[] = "ab%c\\n"; printf(s, 67); return 0; }'), 'abC\n');
+});
+
+test('printf con cadena literal y %s aplicado a un código numérico', () => {
+  assert.strictEqual(salida('int main(){ printf("%s|", 65); return 0; }'), 'A|');
+});
+
+test('putchar devuelve el código del carácter escrito, no el argumento original', () => {
+  assert.strictEqual(salida('int main(){ int x = putchar(321); printf("%d", x); return 0; }'), 'A65');
+});
+
+test('putchar con un carácter devuelve su código', () => {
+  assert.strictEqual(salida('int main(){ printf("%d", putchar(65)); return 0; }'), 'A65');
+});
+
+test('un especificador printf no soportado sigue produciendo error', () => {
+  const r = run('int main(){ printf("%x", 1); return 0; }');
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Formato printf no soportado/);
+});

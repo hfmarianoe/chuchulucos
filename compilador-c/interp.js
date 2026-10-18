@@ -915,7 +915,6 @@
       return 'int';
     }
 
-    isArray(val) { return Array.isArray(val); }
     isFloatType(ty) { return ty === 'float'; }
 
     // ---------- Function calls ----------
@@ -1171,22 +1170,10 @@
     builtinPrintf(args, line) {
       if (args.length === 0) return 0;
       const formatArg = args[0];
-      let formatStr;
-      if (typeof formatArg === 'number') {
-        // assume char code? not useful
-        formatStr = String.fromCharCode(formatArg);
-      } else if (Array.isArray(formatArg)) {
-        formatStr = this.arrayToString(formatArg);
-      } else {
-        // if it's a string literal? not possible, but maybe from variable
-        const v = this.lookupVariable(formatArg);
-        if (v) {
-          if (v.arr) formatStr = this.arrayToString(v.value);
-          else formatStr = String.fromCharCode(v.value);
-        } else {
-          formatStr = String(formatArg);
-        }
-      }
+      // evalArg solo entrega números (código de carácter) o arreglos de códigos (cadenas).
+      const formatStr = Array.isArray(formatArg)
+        ? this.arrayToString(formatArg)
+        : String.fromCharCode(formatArg);
       let argIndex = 1;
       let out = '';
       for (let i = 0; i < formatStr.length; i++) {
@@ -1272,7 +1259,7 @@
       if (args.length === 0) return 0;
       const ch = Math.trunc(args[0]) & 0xFF;
       this.output += String.fromCharCode(ch);
-      return args[0];
+      return ch;
     }
 
     arrayToString(arr) {
