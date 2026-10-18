@@ -50,3 +50,9 @@ test('M3 existe atajo de teclado para ejecutar desde el editor', () => {
 test('A4 showError no muestra línea nula', () => {
   assert.doesNotMatch(html, /if \(line >= 0\)/);
 });
+
+// Barra de capacidad: el editor tiene un tope de líneas y lo muestra como medidor.
+test('la barra de capacidad es un role=meter y el tope es de 40 líneas', () => {
+  assert.match(html, /role="meter"[^>]*aria-valuemax="40"/);
+  assert.match(html, /const MAX_LINEAS = 40;/);
+});

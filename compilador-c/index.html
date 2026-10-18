@@ -78,6 +78,30 @@
             border-bottom: 1px solid #ccc;
             align-items: center;
         }
+        .capacity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 8px;
+            font-size: 0.85em;
+            border-bottom: 1px solid #ccc;
+        }
+        .capacity.full #capacity-text { font-weight: bold; }
+        .capacity-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--gutter-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        #capacity-fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 0.15s;
+        }
+        #capacity-fill.warn { background: #e0a000; }
+        #capacity-fill.full { background: #c62828; }
         .editor-bar button {
             padding: 4px 8px;
             font-size: 0.9em;
@@ -274,6 +298,12 @@
                 <input type="range" id="speed" min="50" max="1000" value="500">
             </div>
         </div>
+        <div class="capacity">
+            <span id="capacity-text"></span>
+            <div class="capacity-bar" role="meter" aria-label="Espacio para código" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0">
+                <div id="capacity-fill"></div>
+            </div>
+        </div>
         <div class="editor-body">
             <div id="gutter"></div>
             <pre id="code-display"></pre>
@@ -340,6 +370,28 @@
     let codeLineElems = [];
 
     // Código de ejemplo inicial
+    // Tope de líneas: los programas de inicio son cortos.
+    const MAX_LINEAS = 40;
+    const capacityFill = document.getElementById('capacity-fill');
+    const capacityText = document.getElementById('capacity-text');
+    const capacityMeter = document.querySelector('.capacity-bar');
+    let ultimoCodigoValido = '';
+
+    function contarLineas(texto) {
+        return texto.split('\n').length;
+    }
+
+    function actualizarCapacidad() {
+        const n = contarLineas(code.value);
+        const proporcion = n / MAX_LINEAS;
+        capacityFill.style.width = Math.min(100, Math.round(proporcion * 100)) + '%';
+        capacityFill.className = n >= MAX_LINEAS ? 'full' : (proporcion >= 0.8 ? 'warn' : '');
+        capacityText.textContent = `${n} / ${MAX_LINEAS} líneas`;
+        capacityMeter.setAttribute('aria-valuenow', n);
+        capacityMeter.setAttribute('aria-valuetext', `${n} de ${MAX_LINEAS} líneas`);
+        capacityMeter.parentElement.classList.toggle('full', n >= MAX_LINEAS);
+    }
+
     const sampleCode = `int sum(int n) {
     int total = 0;
     for (int i = 0; i < n; i++) {
@@ -356,11 +408,21 @@ int main() {
 }`;
     code.value = sampleCode;
     sourceCode = sampleCode;
+    ultimoCodigoValido = sampleCode;
+    actualizarCapacidad();
     // Actualizar numeración del editor inicialmente
     updateEditorDisplay();
 
     // Eventos
     code.addEventListener('input', () => {
+        if (contarLineas(code.value) > MAX_LINEAS) {
+            // Se pasó del tope (escritura o pegado): volver al último código válido.
+            const pos = Math.max(0, code.selectionStart - 1);
+            code.value = ultimoCodigoValido;
+            code.selectionStart = code.selectionEnd = Math.min(pos, code.value.length);
+        }
+        ultimoCodigoValido = code.value;
+        actualizarCapacidad();
         sourceCode = code.value;
         updateEditorDisplay();
         // invalidar traza cuando se modifica el código
