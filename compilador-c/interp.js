@@ -610,8 +610,9 @@
       this.output = '';
       this.steps = [];
       this.stepCount = 0;
-      this.maxSteps = 5000;
+      this.maxSteps = 50000;
       this.maxDepth = 200;
+      this.profundidadMax = 0;
       this.currentLine = 0;
     }
 
@@ -633,7 +634,10 @@
         output: this.output,
         error: null,
         errorLine: null,
-        steps: this.steps
+        steps: this.steps,
+        pasos: this.stepCount,
+        limite: this.maxSteps,
+        profundidad: this.profundidadMax
       };
     }
 
@@ -715,9 +719,15 @@
       }
       if (expr.type === 'Binary') {
         const left = this.evalExpr(expr.left);
+        if (expr.op === '&&') {
+          return left ? (this.evalExpr(expr.right) ? 1 : 0) : 0;
+        }
+        if (expr.op === '||') {
+          return left ? 1 : (this.evalExpr(expr.right) ? 1 : 0);
+        }
         const right = this.evalExpr(expr.right);
-        const leftIsFloat = typeof left === 'number' && !Number.isInteger(left) || this.isArray(left) ? false : (this.isFloatType(this.getExprType(expr.left)));
-        const rightIsFloat = typeof right === 'number' && !Number.isInteger(right) || this.isArray(right) ? false : (this.isFloatType(this.getExprType(expr.right)));
+        const leftIsFloat = this.getExprType(expr.left) === 'float';
+        const rightIsFloat = this.getExprType(expr.right) === 'float';
         const useFloat = leftIsFloat || rightIsFloat;
         const l = Array.isArray(left) ? NaN : left;
         const r = Array.isArray(right) ? NaN : right;
@@ -856,6 +866,16 @@
         return 'int';
       }
       if (expr.type === 'StringLiteral') return 'char';
+      if (expr.type === 'Unary') return expr.op === '!' ? 'int' : this.getExprType(expr.operand);
+      if (expr.type === 'Binary') {
+        if (['==', '!=', '<', '>', '<=', '>=', '&&', '||'].includes(expr.op)) return 'int';
+        if (this.getExprType(expr.left) === 'float' || this.getExprType(expr.right) === 'float') return 'float';
+        return 'int';
+      }
+      if (expr.type === 'Conditional') {
+        if (this.getExprType(expr.thenExpr) === 'float' || this.getExprType(expr.elseExpr) === 'float') return 'float';
+        return 'int';
+      }
       return 'int';
     }
 
@@ -1074,29 +1094,34 @@
     }
 
     executeFor(stmt) {
-      if (stmt.init) {
-        if (stmt.init.type === 'VarDecl') this.executeVarDecl(stmt.init);
-        else this.evalExpr(stmt.init.expr);
-      }
-      while (true) {
-        if (stmt.cond) {
-          this.recordStep(stmt.line); // condition evaluation step
-          const cond = this.evalExpr(stmt.cond);
-          if (!cond) break;
-        } else {
-          this.recordStep(stmt.line); // still record condition? spec says once per iteration
+      this.pushScope();
+      try {
+        if (stmt.init) {
+          if (stmt.init.type === 'VarDecl') this.executeVarDecl(stmt.init);
+          else this.evalExpr(stmt.init.expr);
         }
-        try {
-          this.executeStatement(stmt.body);
-        } catch (e) {
-          if (e instanceof BreakSignal) break;
-          if (e instanceof ContinueSignal) {
-            // continue goes to increment
-          } else throw e;
+        while (true) {
+          if (stmt.cond) {
+            this.recordStep(stmt.line); // condition evaluation step
+            const cond = this.evalExpr(stmt.cond);
+            if (!cond) break;
+          } else {
+            this.recordStep(stmt.line); // still record condition? spec says once per iteration
+          }
+          try {
+            this.executeStatement(stmt.body);
+          } catch (e) {
+            if (e instanceof BreakSignal) break;
+            if (e instanceof ContinueSignal) {
+              // continue goes to increment
+            } else throw e;
+          }
+          if (stmt.incr) {
+            this.evalExpr(stmt.incr);
+          }
         }
-        if (stmt.incr) {
-          this.evalExpr(stmt.incr);
-        }
+      } finally {
+        this.popScope();
       }
     }
 
@@ -1221,10 +1246,11 @@
     recordStep(line) {
       this.stepCount++;
       if (this.stepCount > this.maxSteps) {
-        throw new InterpreterError('Más de 5000 pasos: posible bucle infinito', this.currentLine || line);
+        throw new InterpreterError('Se superó el límite de ' + this.maxSteps + ' pasos (¿bucle infinito?)', this.currentLine || line);
       }
       const fnName = this.callStack.length > 0 ? this.callStack[this.callStack.length - 1].name : null;
       const depth = this.callStack.length;
+      if (depth > this.profundidadMax) this.profundidadMax = depth;
       const vars = [];
       const seen = new Set();
       // Collect local scopes (innermost first)
@@ -1269,6 +1295,7 @@
 
   // ==================== Public API ====================
   function run(source) {
+    let interpreter = null;
     try {
       const lexer = new Lexer(source);
       const tokens = lexer.tokenize();
@@ -1277,24 +1304,65 @@
       if (!program.functions['main']) {
         throw new InterpreterError('Falta la función main()', 1);
       }
-      const interpreter = new Interpreter(program);
+      interpreter = new Interpreter(program);
       return interpreter.run();
     } catch (e) {
       let errorMessage = e.message || String(e);
       let errorLine = e.line || null;
-      // If it's InterpreterError, line is set; else try to extract line from message
+      if (errorLine === null) {
+        const match = errorMessage.match(/en línea (\d+)/);
+        if (match) errorLine = Number(match[1]);
+      }
       return {
         ok: false,
-        output: '',
+        output: interpreter ? interpreter.output : '',
         error: errorMessage,
         errorLine: errorLine,
-        steps: []
+        steps: [],
+        pasos: interpreter ? interpreter.stepCount : 0,
+        limite: interpreter ? interpreter.maxSteps : null,
+        profundidad: interpreter ? interpreter.profundidadMax : 0
       };
     }
   }
 
+  // Mide un programa sin ejecutarlo: variables declaradas y niveles de anidamiento.
+  function analizar(source) {
+    const program = new Parser(new Lexer(source).tokenize()).parseProgram();
+    let variables = program.globals.reduce((n, d) => n + d.declarators.length, 0);
+    let anidamiento = 0;
+    const recorrer = (stmt, nivel) => {
+      if (!stmt) return;
+      if (stmt.type === 'VarDecl') {
+        variables += stmt.declarators.length;
+      } else if (stmt.type === 'Block') {
+        stmt.stmts.forEach((s) => recorrer(s, nivel));
+      } else if (stmt.type === 'If') {
+        const n = nivel + 1;
+        anidamiento = Math.max(anidamiento, n);
+        recorrer(stmt.thenStmt, n);
+        // Un else if no añade nivel: la cadena se lee como una sola decisión.
+        const esElseIf = stmt.elseStmt && stmt.elseStmt.type === 'If';
+        recorrer(stmt.elseStmt, esElseIf ? nivel : n);
+      } else if (stmt.type === 'While' || stmt.type === 'DoWhile' || stmt.type === 'For') {
+        const n = nivel + 1;
+        anidamiento = Math.max(anidamiento, n);
+        if (stmt.type === 'For' && stmt.init && stmt.init.type === 'VarDecl') {
+          variables += stmt.init.declarators.length;
+        }
+        recorrer(stmt.body, n);
+      }
+    };
+    for (const nombre of Object.keys(program.functions)) {
+      const f = program.functions[nombre];
+      variables += f.params.length;
+      recorrer(f.body, 0);
+    }
+    return { variables, anidamiento };
+  }
+
   // Attach to global
-  g.CInterp = { run: run };
+  g.CInterp = { run: run, analizar: analizar };
 })(typeof globalThis !== 'undefined' ? globalThis : window);
 
-if (typeof module !== 'undefined') module.exports = { run: globalThis.CInterp.run };
+if (typeof module !== 'undefined') module.exports = { run: globalThis.CInterp.run, analizar: globalThis.CInterp.analizar };

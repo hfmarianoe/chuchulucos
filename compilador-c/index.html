@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Editor y Depurador C Educativo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Editor y depurador paso a paso de C para estudiantes.">
     <!-- Cargar el intérprete (ya existente) -->
     <script src="interp.js"></script>
     <style>
@@ -14,6 +15,7 @@
             --accent: #007acc;
             --highlight-bg: rgba(0,122,204,0.1);
             --error-bg: #ffdddd;
+            --error-line-bg: #ffcccc;
             --gutter-bg: #e0e0e0;
             --gutter-color: #555;
             --var-chip-bg: #ddd;
@@ -27,6 +29,7 @@
                 --accent: #4daafc;
                 --highlight-bg: rgba(77,170,252,0.2);
                 --error-bg: #5a0000;
+                --error-line-bg: #5a0000;
                 --gutter-bg: #2d2d2d;
                 --gutter-color: #aaa;
                 --var-chip-bg: #333;
@@ -75,6 +78,46 @@
             border-bottom: 1px solid #ccc;
             align-items: center;
         }
+        .capacity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 8px;
+            font-size: 0.85em;
+            border-bottom: 1px solid #ccc;
+        }
+        .capacity.full #capacity-text { font-weight: bold; }
+        .capacity-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--gutter-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        #capacity-fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 0.15s;
+        }
+        #capacity-fill.warn { background: #e0a000; }
+        #capacity-fill.full { background: #c62828; }
+        #steps-fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 0.15s;
+        }
+        #steps-fill.warn { background: #e0a000; }
+        #steps-fill.full { background: #c62828; }
+        #vars-fill, #anid-fill, #prof-fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 0.15s;
+        }
+        #vars-fill.warn, #anid-fill.warn, #prof-fill.warn { background: #e0a000; }
+        #vars-fill.full, #anid-fill.full, #prof-fill.full { background: #c62828; }
         .editor-bar button {
             padding: 4px 8px;
             font-size: 0.9em;
@@ -123,7 +166,7 @@
             font-weight: bold;
         }
         #gutter div.error-line {
-            background: #ffcccc;
+            background: var(--error-line-bg);
         }
 
         .code-area {
@@ -153,7 +196,7 @@
             background: var(--highlight-bg);
         }
         .code-line.error-line {
-            background: #ffcccc;
+            background: var(--error-line-bg);
         }
 
         #code {
@@ -244,29 +287,61 @@
         }
         #error {
             background: var(--error-bg);
-            color: #000;
+            color: var(--text-color);
             padding: 8px;
             margin: 8px;
             border-radius: 4px;
         }
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
+<h1 class="sr-only">Editor y depurador de C</h1>
 
-<div class="container">
+<main class="container">
     <!-- Panel izquierdo: editor -->
     <div class="left" id="editor">
         <div class="editor-bar">
             <button id="run-btn" title="Ejecutar/Play">▶ Ejecutar</button>
-            <button id="play-btn" title="Play">▶| Play</button>
-            <button id="pause-btn" title="Pausar">⏸ Pausa</button>
-            <button id="prev-btn" title="Anterior">◀ Anterior</button>
-            <button id="next-btn" title="Siguiente">▶| Siguiente</button>
-            <button id="reset-btn" title="Reiniciar">⟲ Reiniciar</button>
+            <button id="play-btn" title="Reproducir" aria-label="Play (reproducir)">⏵ Play</button>
+            <button id="pause-btn" title="Pausar" aria-label="Pausar">⏸ Pausa</button>
+            <button id="prev-btn" title="Anterior" aria-label="Paso anterior">◀ Anterior</button>
+            <button id="next-btn" title="Siguiente" aria-label="Paso siguiente">⏭ Siguiente</button>
+            <button id="reset-btn" title="Reiniciar" aria-label="Reiniciar">⟲ Reiniciar</button>
             <div class="speed-control">
                 <label for="speed">Velocidad (ms):</label>
                 <input type="range" id="speed" min="50" max="1000" value="500">
+            </div>
+        </div>
+        <div class="capacity">
+            <span id="capacity-text"></span>
+            <div class="capacity-bar" role="meter" aria-label="Espacio para código" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div id="capacity-fill"></div>
+            </div>
+        </div>
+        <div class="capacity">
+            <span id="steps-text">0 / 50000 pasos</span>
+            <div class="capacity-bar" role="meter" aria-label="Pasos de la última ejecución" aria-valuemin="0" aria-valuemax="50000" aria-valuenow="0">
+                <div id="steps-fill"></div>
+            </div>
+        </div>
+        <div class="capacity">
+            <span id="vars-text">0 / 20 variables</span>
+            <div class="capacity-bar" role="meter" aria-label="Variables declaradas" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0">
+                <div id="vars-fill"></div>
+            </div>
+        </div>
+        <div class="capacity">
+            <span id="anid-text">0 / 3 niveles de anidamiento</span>
+            <div class="capacity-bar" role="meter" aria-label="Niveles de anidamiento" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+                <div id="anid-fill"></div>
+            </div>
+        </div>
+        <div class="capacity">
+            <span id="prof-text">0 / 200 niveles de llamada</span>
+            <div class="capacity-bar" role="meter" aria-label="Profundidad de llamadas de la última ejecución" aria-valuemin="0" aria-valuemax="200" aria-valuenow="0">
+                <div id="prof-fill"></div>
             </div>
         </div>
         <div class="editor-body">
@@ -282,17 +357,30 @@
             <span id="counter"></span>
             <div id="current-line"></div>
         </div>
+        <p id="status" class="sr-only" role="status"></p>
         <pre id="output"></pre>
         <div id="vars"></div>
-        <div id="error" class="hidden"></div>
+        <div id="error" class="hidden" role="alert"></div>
     </div>
-</div>
+</main>
 
 <script>
     // Referencias DOM
     const code = document.getElementById('code');
     const gutter = document.getElementById('gutter');
     const codeDisplay = document.getElementById('code-display');
+    code.addEventListener('scroll', () => {
+        gutter.scrollTop = code.scrollTop;
+        codeDisplay.scrollTop = code.scrollTop;
+        codeDisplay.scrollLeft = code.scrollLeft;
+    });
+    code.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd+Enter ejecuta. Tab no se captura para no atrapar el teclado.
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            onRun();
+        }
+    });
 
     const runBtn = document.getElementById('run-btn');
     const playBtn = document.getElementById('play-btn');
@@ -305,6 +393,7 @@
     const counterDisplay = document.getElementById('counter');
     const currentLineDisplay = document.getElementById('current-line');
     const outputDisplay = document.getElementById('output');
+    const statusDisplay = document.getElementById('status');
     const varsDisplay = document.getElementById('vars');
     const errorDisplay = document.getElementById('error');
 
@@ -321,6 +410,35 @@
     let codeLineElems = [];
 
     // Código de ejemplo inicial
+    // Tope de líneas: los programas de inicio son cortos.
+    const MAX_LINEAS = 100;
+    const MAX_VARIABLES = 20;
+    const MAX_ANIDAMIENTO = 3;
+    const MAX_PROFUNDIDAD = 200;
+    const capacityFill = document.getElementById('capacity-fill');
+    const capacityText = document.getElementById('capacity-text');
+    const stepsFill = document.getElementById('steps-fill');
+    const stepsText = document.getElementById('steps-text');
+    const stepsMeter = stepsFill.parentElement;
+    const MAX_PASOS_DEFAULT = 50000;
+    const capacityMeter = document.querySelector('.capacity-bar');
+    let ultimoCodigoValido = '';
+
+    function contarLineas(texto) {
+        return texto.split('\n').length;
+    }
+
+    function actualizarCapacidad() {
+        const n = contarLineas(code.value);
+        const proporcion = n / MAX_LINEAS;
+        capacityFill.style.width = Math.min(100, Math.round(proporcion * 100)) + '%';
+        capacityFill.className = n >= MAX_LINEAS ? 'full' : (proporcion >= 0.8 ? 'warn' : '');
+        capacityText.textContent = `${n} / ${MAX_LINEAS} líneas`;
+        capacityMeter.setAttribute('aria-valuenow', n);
+        capacityMeter.setAttribute('aria-valuetext', `${n} de ${MAX_LINEAS} líneas`);
+        capacityMeter.parentElement.classList.toggle('full', n >= MAX_LINEAS);
+    }
+
     const sampleCode = `int sum(int n) {
     int total = 0;
     for (int i = 0; i < n; i++) {
@@ -337,11 +455,23 @@ int main() {
 }`;
     code.value = sampleCode;
     sourceCode = sampleCode;
+    ultimoCodigoValido = sampleCode;
+    actualizarCapacidad();
+    actualizarMedidoresCodigo();
     // Actualizar numeración del editor inicialmente
     updateEditorDisplay();
 
     // Eventos
     code.addEventListener('input', () => {
+        if (contarLineas(code.value) > MAX_LINEAS) {
+            // Se pasó del tope (escritura o pegado): volver al último código válido.
+            const pos = Math.max(0, code.selectionStart - 1);
+            code.value = ultimoCodigoValido;
+            code.selectionStart = code.selectionEnd = Math.min(pos, code.value.length);
+        }
+        ultimoCodigoValido = code.value;
+        actualizarCapacidad();
+        actualizarMedidoresCodigo();
         sourceCode = code.value;
         updateEditorDisplay();
         // invalidar traza cuando se modifica el código
@@ -378,10 +508,48 @@ int main() {
         hideError();
     }
 
+    // Pinta un medidor: valor usado frente a su tope, con el mismo color que las demás barras.
+    function pintarMedidor(id, valor, tope, texto) {
+        const fill = document.getElementById(id + '-fill');
+        const meter = fill.parentElement;
+        const usados = Math.min(valor, tope);
+        const proporcion = usados / tope;
+        fill.style.width = Math.round(proporcion * 100) + '%';
+        fill.className = usados >= tope ? 'full' : (proporcion >= 0.8 ? 'warn' : '');
+        document.getElementById(id + '-text').textContent = texto(usados);
+        meter.setAttribute('aria-valuenow', usados);
+        meter.setAttribute('aria-valuetext', texto(usados));
+    }
+
+    // Variables y anidamiento se miden al escribir; si el código aún no es válido, se mantiene el último resultado.
+    function actualizarMedidoresCodigo() {
+        let r;
+        try {
+            r = CInterp.analizar(code.value);
+        } catch (e) {
+            return;
+        }
+        pintarMedidor('vars', r.variables, MAX_VARIABLES, n => `${n} / ${MAX_VARIABLES} variables`);
+        pintarMedidor('anid', r.anidamiento, MAX_ANIDAMIENTO, n => `${n} / ${MAX_ANIDAMIENTO} niveles de anidamiento`);
+    }
+
+    function mostrarPasos(pasos, limite) {
+        const usados = Math.min(pasos, limite);
+        const proporcion = usados / limite;
+        stepsFill.style.width = Math.round(proporcion * 100) + '%';
+        stepsFill.className = usados >= limite ? 'full' : (proporcion >= 0.8 ? 'warn' : '');
+        stepsText.textContent = `${usados} / ${limite} pasos`;
+        stepsMeter.setAttribute('aria-valuenow', usados);
+        stepsMeter.setAttribute('aria-valuemax', limite);
+        stepsMeter.setAttribute('aria-valuetext', `${pasos} de ${limite} pasos`);
+    }
+
     function onRun() {
         invalidateTrace();
         try {
             const result = CInterp.run(sourceCode);
+            mostrarPasos(result.pasos || 0, result.limite || MAX_PASOS_DEFAULT);
+            pintarMedidor('prof', result.profundidad || 0, MAX_PROFUNDIDAD, n => `${n} / ${MAX_PROFUNDIDAD} niveles de llamada`);
             if (result.error) {
                 showError(result.error, result.errorLine);
                 steps = [];
@@ -393,6 +561,7 @@ int main() {
             previousVars = null;
             if (steps && steps.length > 0) {
                 updateUI();
+                statusDisplay.textContent = `Traza lista: ${steps.length} pasos.`;
                 isPlaying = true;
                 startStepLoop();
             } else {
@@ -409,6 +578,7 @@ int main() {
         playInterval = setInterval(() => {
             if (currentStepIndex >= steps.length - 1) {
                 // Finalizado
+                statusDisplay.textContent = 'Ejecución terminada.';
                 isPlaying = false;
                 clearInterval(playInterval);
                 playInterval = null;
@@ -574,7 +744,7 @@ int main() {
     function showError(msg, line) {
         errorDisplay.classList.remove('hidden');
         errorDisplay.textContent = `[Error] ${msg}`;
-        if (line >= 0) {
+        if (line >= 1) {
             errorDisplay.textContent += ` en línea ${line}`;
         }
 
