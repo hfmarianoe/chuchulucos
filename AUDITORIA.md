@@ -1,5 +1,7 @@
 # Auditoría — chuchulucos.shop
 
+> **Instrucción para la próxima sesión en la nube:** antes de cualquier otra tarea, borra en GitHub estas ramas remotas, que ya están fusionadas en `main`: `fix/pendientes-b2-b7`, `fix/pendientes-b3-b4` y `fix/pendientes-b5`. Verifica primero con `git branch -r --merged origin/main` que cada una aparece, y no toques ninguna otra rama. Reporta el resultado en la sesión.
+
 - **Origen:** auditoría del 18 de octubre de 2026 (commit `fbf7813`).
 - **Estado:** no quedan pendientes abiertos. Todos los hallazgos de la auditoría están resueltos en `main`.
 - **Líneas:** las referencias de la auditoría son del código de `fbf7813`; el código cambió al resolverse, así que ya no coinciden.
