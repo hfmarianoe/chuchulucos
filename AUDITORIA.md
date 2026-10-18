@@ -1,20 +1,25 @@
-# Pendientes de la auditoría — chuchulucos.shop
+# Auditoría — chuchulucos.shop
 
 - **Origen:** auditoría del 18 de octubre de 2026 (commit `fbf7813`).
-- **Estado:** la tanda 1 se fusionó en `main` con la PR [#7](https://github.com/hfmarianoe/chuchulucos/pull/7). Este archivo lista solo lo que sigue abierto.
-- **Líneas:** las referencias son del código actual de `main` (`1503a8b`).
+- **Estado:** no quedan pendientes abiertos. Todos los hallazgos de la auditoría están resueltos en `main`.
+- **Líneas:** las referencias de la auditoría son del código de `fbf7813`; el código cambió al resolverse, así que ya no coinciden.
 
-## Pendientes
+## Resueltos
 
-| ID | Severidad | Hallazgo | Ubicación |
+| ID | Severidad | Hallazgo | Resuelto en |
 |---|---|---|---|
-| B1 | Baja | El intérprete sigue en un solo archivo, sin módulos ni build | `compilador-c/interp.js` |
-| B2 | Baja | Código muerto: ramas de `builtinPrintf` inalcanzables, `builtinPutchar` devuelve el argumento y no el carácter, y `isArray` es un envoltorio | `compilador-c/interp.js:1136`, `:1231`, `:882` |
-| B3 | Baja | La app de C no tiene enlace desde la página principal y el README está desactualizado | `index.html`, `README.md` |
-| B4 | Baja | `href="/"` rompe en subcarpeta o con `file://` | `index.html:12` |
-| B5 | Baja | Colores fijos mezclados con variables; falta `color-scheme` y no hay interruptor de tema | `style.css`, `compilador-c/index.html` |
-| B7 | Baja | `recordStep` copia todas las variables y la salida en cada paso | `compilador-c/interp.js:1246-1290` |
-| B8 | Baja | Identidad de git sin configurar en este clon | — |
+| A5 | Alta | Los arreglos se pasaban por copia a las funciones | PR [#8](https://github.com/hfmarianoe/chuchulucos/pull/8) |
+| M4 | Media | `scanf` daba un mensaje engañoso | PR [#8](https://github.com/hfmarianoe/chuchulucos/pull/8) |
+| M5 | Media | Un `/*` sin cerrar y un `#` suelto pasaban sin aviso | PR [#8](https://github.com/hfmarianoe/chuchulucos/pull/8) |
+| M6 | Media | El léxico no avisaba de hexadecimales, exponentes, sufijos y palabras no soportadas | PR [#8](https://github.com/hfmarianoe/chuchulucos/pull/8) |
+| B1 | Baja | El intérprete estaba en un solo archivo | PR [#11](https://github.com/hfmarianoe/chuchulucos/pull/11) |
+| B2 | Baja | Código muerto en `builtinPrintf`, `builtinPutchar` e `isArray` | PR [#10](https://github.com/hfmarianoe/chuchulucos/pull/10) |
+| B3 | Baja | Sin enlace a la app de C desde la página principal; README desactualizado | PR [#10](https://github.com/hfmarianoe/chuchulucos/pull/10) |
+| B4 | Baja | `href="/"` rompía en subcarpeta o con `file://` | PR [#10](https://github.com/hfmarianoe/chuchulucos/pull/10) |
+| B5 | Baja | Colores fijos, falta `color-scheme` y sin interruptor de tema | PR [#10](https://github.com/hfmarianoe/chuchulucos/pull/10) |
+| B6 | Baja | Mensaje de límite de pasos con un número escrito a mano | Tanda 1, PR [#7](https://github.com/hfmarianoe/chuchulucos/pull/7) |
+| B7 | Baja | `recordStep` copiaba todas las variables en cada paso | PR [#10](https://github.com/hfmarianoe/chuchulucos/pull/10) |
+| B8 | Baja | Identidad de git sin configurar en el clon | Configuración local del clon (no versionada) |
 
 ## Notas de la tanda 1
 
@@ -24,4 +29,4 @@
 
 ## Verificación
 
-- `node --test tests/*.test.js`: 67 pruebas, todas pasan.
+- `node --test tests/*.test.js`: 112 pruebas, todas pasan, sin skips.
