@@ -102,6 +102,14 @@
         }
         #capacity-fill.warn { background: #e0a000; }
         #capacity-fill.full { background: #c62828; }
+        #steps-fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 0.15s;
+        }
+        #steps-fill.warn { background: #e0a000; }
+        #steps-fill.full { background: #c62828; }
         .editor-bar button {
             padding: 4px 8px;
             font-size: 0.9em;
@@ -304,6 +312,12 @@
                 <div id="capacity-fill"></div>
             </div>
         </div>
+        <div class="capacity">
+            <span id="steps-text">0 / 50000 pasos</span>
+            <div class="capacity-bar" role="meter" aria-label="Pasos de la última ejecución" aria-valuemin="0" aria-valuemax="50000" aria-valuenow="0">
+                <div id="steps-fill"></div>
+            </div>
+        </div>
         <div class="editor-body">
             <div id="gutter"></div>
             <pre id="code-display"></pre>
@@ -374,6 +388,10 @@
     const MAX_LINEAS = 100;
     const capacityFill = document.getElementById('capacity-fill');
     const capacityText = document.getElementById('capacity-text');
+    const stepsFill = document.getElementById('steps-fill');
+    const stepsText = document.getElementById('steps-text');
+    const stepsMeter = stepsFill.parentElement;
+    const MAX_PASOS_DEFAULT = 50000;
     const capacityMeter = document.querySelector('.capacity-bar');
     let ultimoCodigoValido = '';
 
@@ -459,10 +477,22 @@ int main() {
         hideError();
     }
 
+    function mostrarPasos(pasos, limite) {
+        const usados = Math.min(pasos, limite);
+        const proporcion = usados / limite;
+        stepsFill.style.width = Math.round(proporcion * 100) + '%';
+        stepsFill.className = usados >= limite ? 'full' : (proporcion >= 0.8 ? 'warn' : '');
+        stepsText.textContent = `${usados} / ${limite} pasos`;
+        stepsMeter.setAttribute('aria-valuenow', usados);
+        stepsMeter.setAttribute('aria-valuemax', limite);
+        stepsMeter.setAttribute('aria-valuetext', `${pasos} de ${limite} pasos`);
+    }
+
     function onRun() {
         invalidateTrace();
         try {
             const result = CInterp.run(sourceCode);
+            mostrarPasos(result.pasos || 0, result.limite || MAX_PASOS_DEFAULT);
             if (result.error) {
                 showError(result.error, result.errorLine);
                 steps = [];

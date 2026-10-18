@@ -22,3 +22,13 @@ test('A6 bucle infinito sigue deteniéndose', () => {
   assert.strictEqual(r.ok, false);
   assert.match(r.error, /paso/i);
 });
+
+// La página muestra los pasos usados y el límite: run() los devuelve.
+test('run() reporta pasos usados y límite', () => {
+  const ok = run('int main(){ int t=0; for(int i=0;i<10;i++){ t+=1; } return 0; }');
+  assert.strictEqual(ok.limite, 50000);
+  assert.ok(ok.pasos > 0 && ok.pasos < 50000);
+  const mal = run('int main(){ while(1){ } return 0; }');
+  assert.strictEqual(mal.limite, 50000);
+  assert.ok(mal.pasos > 50000);
+});

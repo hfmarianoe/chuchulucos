@@ -633,7 +633,9 @@
         output: this.output,
         error: null,
         errorLine: null,
-        steps: this.steps
+        steps: this.steps,
+        pasos: this.stepCount,
+        limite: this.maxSteps
       };
     }
 
@@ -1313,7 +1315,9 @@
         output: interpreter ? interpreter.output : '',
         error: errorMessage,
         errorLine: errorLine,
-        steps: []
+        steps: [],
+        pasos: interpreter ? interpreter.stepCount : 0,
+        limite: interpreter ? interpreter.maxSteps : null
       };
     }
   }
