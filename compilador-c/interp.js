@@ -610,7 +610,7 @@
       this.output = '';
       this.steps = [];
       this.stepCount = 0;
-      this.maxSteps = 5000;
+      this.maxSteps = 100000;
       this.maxDepth = 200;
       this.currentLine = 0;
     }
@@ -1242,7 +1242,7 @@
     recordStep(line) {
       this.stepCount++;
       if (this.stepCount > this.maxSteps) {
-        throw new InterpreterError('Más de 5000 pasos: posible bucle infinito', this.currentLine || line);
+        throw new InterpreterError('Se superó el límite de ' + this.maxSteps + ' pasos (¿bucle infinito?)', this.currentLine || line);
       }
       const fnName = this.callStack.length > 0 ? this.callStack[this.callStack.length - 1].name : null;
       const depth = this.callStack.length;
