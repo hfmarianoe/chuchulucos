@@ -51,7 +51,7 @@
           let start = this.pos;
           while (this.pos < this.src.length && /[a-zA-Z0-9_]/.test(this.src[this.pos])) this.pos++;
           const word = this.src.slice(start, this.pos);
-          const keywords = new Set(['int','char','float','double','void','if','else','while','do','for','break','continue','return','const','static','long','unsigned','short','struct','switch','scanf']);
+          const keywords = new Set(['int','char','float','double','void','if','else','while','do','for','break','continue','return','const','static','long','unsigned','short','struct','switch']);
           tokens.push({ type: keywords.has(word) ? 'keyword' : 'identifier', value: word, line: this.line });
           continue;
         }
@@ -574,7 +574,7 @@
       if (tok.type === 'identifier') {
         this.next();
         if (tok.value === 'scanf') {
-          throw new Error('scanf no soportado (línea ' + line + ')');
+          throw new Error('scanf no soportado en línea ' + line);
         }
         return { type: 'Identifier', name: tok.value, line };
       }
@@ -897,7 +897,6 @@
       if (funcName === 'printf') return this.builtinPrintf(args, callExpr.line);
       if (funcName === 'puts') return this.builtinPuts(args, callExpr.line);
       if (funcName === 'putchar') return this.builtinPutchar(args, callExpr.line);
-      if (funcName === 'scanf') throw new InterpreterError('scanf no soportado', this.currentLine);
       const func = this.functions[funcName];
       if (!func) throw new InterpreterError(`Función '${funcName}' no definida`, this.currentLine);
       return this.callUserFunction(func, args);
