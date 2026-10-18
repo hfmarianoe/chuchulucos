@@ -610,7 +610,7 @@
       this.output = '';
       this.steps = [];
       this.stepCount = 0;
-      this.maxSteps = 100000;
+      this.maxSteps = 50000;
       this.maxDepth = 200;
       this.currentLine = 0;
     }
