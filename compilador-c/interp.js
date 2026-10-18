@@ -715,9 +715,13 @@
       }
       if (expr.type === 'Binary') {
         const left = this.evalExpr(expr.left);
+        if (expr.op === '&&') {
+          return left ? (this.evalExpr(expr.right) ? 1 : 0) : 0;
+        }
+        if (expr.op === '||') {
+          return left ? 1 : (this.evalExpr(expr.right) ? 1 : 0);
+        }
         const right = this.evalExpr(expr.right);
-        if (expr.op === '&&') return left && right ? 1 : 0;
-        if (expr.op === '||') return left || right ? 1 : 0;
         const leftIsFloat = this.getExprType(expr.left) === 'float';
         const rightIsFloat = this.getExprType(expr.right) === 'float';
         const useFloat = leftIsFloat || rightIsFloat;
