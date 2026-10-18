@@ -1304,6 +1304,10 @@
     } catch (e) {
       let errorMessage = e.message || String(e);
       let errorLine = e.line || null;
+      if (errorLine === null) {
+        const match = errorMessage.match(/en línea (\d+)/);
+        if (match) errorLine = Number(match[1]);
+      }
       return {
         ok: false,
         output: interpreter ? interpreter.output : '',
