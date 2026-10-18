@@ -253,7 +253,7 @@
             border-radius: 4px;
         }
         .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.hidden { display: none; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -264,7 +264,7 @@
     <div class="left" id="editor">
         <div class="editor-bar">
             <button id="run-btn" title="Ejecutar/Play">▶ Ejecutar</button>
-            <button id="play-btn" title="Reproducir" aria-label="Reproducir">⏵ Play</button>
+            <button id="play-btn" title="Reproducir" aria-label="Play (reproducir)">⏵ Play</button>
             <button id="pause-btn" title="Pausar" aria-label="Pausar">⏸ Pausa</button>
             <button id="prev-btn" title="Anterior" aria-label="Paso anterior">◀ Anterior</button>
             <button id="next-btn" title="Siguiente" aria-label="Paso siguiente">⏭ Siguiente</button>
@@ -287,7 +287,8 @@
             <span id="counter"></span>
             <div id="current-line"></div>
         </div>
-        <pre id="output" aria-live="polite"></pre>
+        <p id="status" class="sr-only" role="status"></p>
+        <pre id="output"></pre>
         <div id="vars"></div>
         <div id="error" class="hidden" role="alert"></div>
     </div>
@@ -298,8 +299,18 @@
     const code = document.getElementById('code');
     const gutter = document.getElementById('gutter');
     const codeDisplay = document.getElementById('code-display');
-code.addEventListener('scroll', () => { gutter.scrollTop = code.scrollTop; codeDisplay.scrollTop = code.scrollTop; codeDisplay.scrollLeft = code.scrollLeft; });
-code.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); onRun(); } if (e.key === 'Tab') { e.preventDefault(); const s = code.selectionStart; code.value = code.value.slice(0, s) + '    ' + code.value.slice(code.selectionEnd); code.selectionStart = code.selectionEnd = s + 4; code.dispatchEvent(new Event('input')); } });
+    code.addEventListener('scroll', () => {
+        gutter.scrollTop = code.scrollTop;
+        codeDisplay.scrollTop = code.scrollTop;
+        codeDisplay.scrollLeft = code.scrollLeft;
+    });
+    code.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd+Enter ejecuta. Tab no se captura para no atrapar el teclado.
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            onRun();
+        }
+    });
 
     const runBtn = document.getElementById('run-btn');
     const playBtn = document.getElementById('play-btn');
@@ -312,6 +323,7 @@ code.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey ||
     const counterDisplay = document.getElementById('counter');
     const currentLineDisplay = document.getElementById('current-line');
     const outputDisplay = document.getElementById('output');
+    const statusDisplay = document.getElementById('status');
     const varsDisplay = document.getElementById('vars');
     const errorDisplay = document.getElementById('error');
 
@@ -400,6 +412,7 @@ int main() {
             previousVars = null;
             if (steps && steps.length > 0) {
                 updateUI();
+                statusDisplay.textContent = `Traza lista: ${steps.length} pasos.`;
                 isPlaying = true;
                 startStepLoop();
             } else {
@@ -416,6 +429,7 @@ int main() {
         playInterval = setInterval(() => {
             if (currentStepIndex >= steps.length - 1) {
                 // Finalizado
+                statusDisplay.textContent = 'Ejecución terminada.';
                 isPlaying = false;
                 clearInterval(playInterval);
                 playInterval = null;

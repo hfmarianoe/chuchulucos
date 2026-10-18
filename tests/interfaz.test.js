@@ -23,8 +23,13 @@ test('M3 la página tiene h1 y landmark main', () => {
   assert.match(html, /<main[\s>]/);
 });
 
-test('M3 la salida tiene aria-live', () => {
-  assert.match(html, /<pre id="output"[^>]*aria-live=/);
+test('M3 la salida anuncia el estado por una región role=status, no en cada paso', () => {
+  assert.match(html, /<p id="status"[^>]*role="status"/);
+  assert.doesNotMatch(html, /<pre id="output"[^>]*aria-live=/);
+});
+
+test('Tab no se captura en el editor (no atrapa el teclado)', () => {
+  assert.doesNotMatch(html, /e\.key === 'Tab'/);
 });
 
 test('M3 la página tiene meta description', () => {
