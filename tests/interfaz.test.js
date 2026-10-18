@@ -12,7 +12,8 @@ test('M1 el editor sincroniza el scroll con la numeración y el resaltado', () =
 
 // M2: los colores de error deben venir de variables para que cambien con el tema.
 test('M2 no hay colores de error fijos en el CSS', () => {
-  assert.doesNotMatch(html, /#ffcccc/i);
+  // Solo se permite el color en la definición del token, no en las reglas.
+  assert.doesNotMatch(html.replace(/--error-line-bg:\s*#[0-9a-f]+;/gi, ''), /#ffcccc/i);
   assert.doesNotMatch(html, /#error\s*\{[^}]*color:\s*#000/);
 });
 
