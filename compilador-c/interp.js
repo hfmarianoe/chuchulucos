@@ -716,6 +716,8 @@
       if (expr.type === 'Binary') {
         const left = this.evalExpr(expr.left);
         const right = this.evalExpr(expr.right);
+        if (expr.op === '&&') return left && right ? 1 : 0;
+        if (expr.op === '||') return left || right ? 1 : 0;
         const leftIsFloat = typeof left === 'number' && !Number.isInteger(left) || this.isArray(left) ? false : (this.isFloatType(this.getExprType(expr.left)));
         const rightIsFloat = typeof right === 'number' && !Number.isInteger(right) || this.isArray(right) ? false : (this.isFloatType(this.getExprType(expr.right)));
         const useFloat = leftIsFloat || rightIsFloat;
