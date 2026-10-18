@@ -293,6 +293,7 @@
     const code = document.getElementById('code');
     const gutter = document.getElementById('gutter');
     const codeDisplay = document.getElementById('code-display');
+    code.addEventListener('scroll', () => { gutter.scrollTop = code.scrollTop; codeDisplay.scrollTop = code.scrollTop; codeDisplay.scrollLeft = code.scrollLeft; });
 
     const runBtn = document.getElementById('run-btn');
     const playBtn = document.getElementById('play-btn');
