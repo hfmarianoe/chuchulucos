@@ -78,6 +78,37 @@ test('la traza de pasos no cambia: mismas líneas, salida y valores', () => {
   assert.strictEqual(r.pasos, TRAZA_ESPERADA.length);
 });
 
+// Llamadas recursivas con una variable local sombreada: misma función y mismo nombre en varios niveles.
+const PROGRAMA_RECURSIVO = 'int f(int n) { int x = n; if (n > 0) { int x = n * 10; printf("%d;", x); f(n - 1); } return x; } int main() { int r = f(2); printf("%d", r); return 0; }';
+
+// Traza de referencia del programa recursivo, generada con la implementación anterior a B7.
+const TRAZA_RECURSIVA_ESPERADA = [
+  "1|main|1|\"\"|",
+  "1|f|2|\"\"|f.n:int=2",
+  "1|f|2|\"\"|f.n:int=2;f.x:int=2",
+  "1|f|2|\"\"|f.n:int=2;f.x:int=2",
+  "1|f|2|\"\"|f.x:int=20;f.n:int=2",
+  "1|f|2|\"20;\"|f.x:int=20;f.n:int=2",
+  "1|f|3|\"20;\"|f.n:int=1",
+  "1|f|3|\"20;\"|f.n:int=1;f.x:int=1",
+  "1|f|3|\"20;\"|f.n:int=1;f.x:int=1",
+  "1|f|3|\"20;\"|f.x:int=10;f.n:int=1",
+  "1|f|3|\"20;10;\"|f.x:int=10;f.n:int=1",
+  "1|f|4|\"20;10;\"|f.n:int=0",
+  "1|f|4|\"20;10;\"|f.n:int=0;f.x:int=0",
+  "1|f|4|\"20;10;\"|f.n:int=0;f.x:int=0",
+  "1|f|3|\"20;10;\"|f.n:int=1;f.x:int=1",
+  "1|f|2|\"20;10;\"|f.n:int=2;f.x:int=2",
+  "1|main|1|\"20;10;\"|main.r:int=2",
+  "1|main|1|\"20;10;2\"|main.r:int=2",
+];
+
+test('la traza de llamadas recursivas con variables sombreadas no cambia', () => {
+  const r = run(PROGRAMA_RECURSIVO);
+  assert.strictEqual(r.ok, true, r.error);
+  assert.deepStrictEqual(r.steps.map(resumen), TRAZA_RECURSIVA_ESPERADA);
+});
+
 test('una variable que no cambia comparte la misma instantánea en todos los pasos', () => {
   const r = run(PROGRAMA);
   // El primer paso se registra antes de declarar g: solo se comparan los pasos donde existe.
