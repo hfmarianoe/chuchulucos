@@ -577,7 +577,7 @@ int main() {
     function showError(msg, line) {
         errorDisplay.classList.remove('hidden');
         errorDisplay.textContent = `[Error] ${msg}`;
-        if (line >= 0) {
+        if (line >= 1) {
             errorDisplay.textContent += ` en línea ${line}`;
         }
 
