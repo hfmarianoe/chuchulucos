@@ -29,3 +29,39 @@ for (const rel of archivos) {
     }
   });
 }
+
+// B5: colores en variables, color-scheme declarado e interruptor de tema.
+const estilosRaiz = leer('style.css');
+const htmlCompilador = leer('compilador-c/index.html');
+const bloqueEstilo = htmlCompilador.match(/<style>([\s\S]*?)<\/style>/)[1];
+
+test('B5 style.css y el compilador declaran color-scheme light dark en :root', () => {
+  assert.match(estilosRaiz, /:root\s*\{[^}]*color-scheme:\s*light dark;/);
+  assert.match(bloqueEstilo, /:root\s*\{[^}]*color-scheme:\s*light dark;/);
+});
+
+test('B5 los dos archivos tienen el modo oscuro guardado por data-theme', () => {
+  for (const css of [estilosRaiz, bloqueEstilo]) {
+    assert.match(css, /@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)/);
+    assert.match(css, /:root\[data-theme="dark"\]\s*\{/);
+  }
+});
+
+test('B5 los estilos no usan colores fijos fuera de los tokens de :root', () => {
+  // Solo se permiten colores en las líneas que declaran una variable (--nombre: valor).
+  for (const css of [estilosRaiz, bloqueEstilo]) {
+    const lineas = css.split('\n').filter((l) => /#[0-9a-f]{3,6}\b|rgba?\(/i.test(l));
+    const fijos = lineas.filter((l) => !/^\s*--[\w-]+:/.test(l));
+    assert.deepStrictEqual(fijos, []);
+  }
+});
+
+test('B5 el compilador tiene un interruptor de tema con aria-pressed y aria-label', () => {
+  assert.match(htmlCompilador, /<button id="theme-btn"[^>]*aria-pressed="false"/);
+  assert.match(htmlCompilador, /<button id="theme-btn"[^>]*aria-label="Tema oscuro"/);
+});
+
+test('B5 la elección de tema se guarda dentro de try/catch', () => {
+  assert.match(htmlCompilador, /try\s*\{\s*localStorage\.setItem\('chuchulucos-tema'/);
+  assert.match(htmlCompilador, /try\s*\{\s*const temaGuardado = localStorage\.getItem\('chuchulucos-tema'/);
+});

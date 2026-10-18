@@ -1,28 +1,38 @@
 :root {
+  color-scheme: light dark;
   --bg: #f7f5ef;
   --fg: #1d1d1b;
   --muted: #5d5b55;
   --accent: #e4572e;
+  --accent-text: #b5401a;
   --card: #ffffff;
   --line: #e2dfd5;
 }
 
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --bg: #161614;
     --fg: #f1efe8;
     --muted: #a6a398;
     --accent: #ff7a52;
+    --accent-text: #ff7a52;
     --card: #1f1f1c;
     --line: #34332e;
   }
 }
 
 :root[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #161614;
   --fg: #f1efe8;
   --muted: #a6a398;
   --accent: #ff7a52;
+  --accent-text: #ff7a52;
   --card: #1f1f1c;
   --line: #34332e;
 }
@@ -54,7 +64,7 @@ body {
   font-size: 1.1rem;
 }
 
-.logo span { color: var(--accent); }
+.logo span { color: var(--accent-text); }
 
 main {
   flex: 1;
@@ -87,7 +97,7 @@ main {
   margin-top: 20px;
   padding: 4px 12px;
   border: 1px solid var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
   border-radius: 999px;
   font-size: 0.85rem;
 }
