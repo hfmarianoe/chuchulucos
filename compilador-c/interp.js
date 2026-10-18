@@ -862,7 +862,7 @@
         return 'int';
       }
       if (expr.type === 'StringLiteral') return 'char';
-      if (expr.type === 'Unary') return this.getExprType(expr.operand);
+      if (expr.type === 'Unary') return expr.op === '!' ? 'int' : this.getExprType(expr.operand);
       if (expr.type === 'Binary') {
         if (['==', '!=', '<', '>', '<=', '>=', '&&', '||'].includes(expr.op)) return 'int';
         if (this.getExprType(expr.left) === 'float' || this.getExprType(expr.right) === 'float') return 'float';
