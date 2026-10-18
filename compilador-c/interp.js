@@ -718,8 +718,8 @@
         const right = this.evalExpr(expr.right);
         if (expr.op === '&&') return left && right ? 1 : 0;
         if (expr.op === '||') return left || right ? 1 : 0;
-        const leftIsFloat = typeof left === 'number' && !Number.isInteger(left) || this.isArray(left) ? false : (this.isFloatType(this.getExprType(expr.left)));
-        const rightIsFloat = typeof right === 'number' && !Number.isInteger(right) || this.isArray(right) ? false : (this.isFloatType(this.getExprType(expr.right)));
+        const leftIsFloat = this.getExprType(expr.left) === 'float';
+        const rightIsFloat = this.getExprType(expr.right) === 'float';
         const useFloat = leftIsFloat || rightIsFloat;
         const l = Array.isArray(left) ? NaN : left;
         const r = Array.isArray(right) ? NaN : right;
@@ -858,6 +858,16 @@
         return 'int';
       }
       if (expr.type === 'StringLiteral') return 'char';
+      if (expr.type === 'Unary') return this.getExprType(expr.operand);
+      if (expr.type === 'Binary') {
+        if (['==', '!=', '<', '>', '<=', '>=', '&&', '||'].includes(expr.op)) return 'int';
+        if (this.getExprType(expr.left) === 'float' || this.getExprType(expr.right) === 'float') return 'float';
+        return 'int';
+      }
+      if (expr.type === 'Conditional') {
+        if (this.getExprType(expr.thenExpr) === 'float' || this.getExprType(expr.elseExpr) === 'float') return 'float';
+        return 'int';
+      }
       return 'int';
     }
 
