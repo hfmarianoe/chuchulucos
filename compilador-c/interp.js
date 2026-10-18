@@ -29,8 +29,14 @@
         }
         // Preprocessor line
         if (ch === '#') {
-          while (this.pos < this.src.length && this.src[this.pos] !== '\n') this.pos++;
-          continue;
+          let tempPos = this.pos + 1;
+          while (tempPos < this.src.length && (this.src[tempPos] === ' ' || this.src[tempPos] === '\t')) tempPos++;
+          if (tempPos < this.src.length && /[a-zA-Z]/.test(this.src[tempPos])) {
+            while (this.pos < this.src.length && this.src[this.pos] !== '\n') this.pos++;
+            continue;
+          } else {
+            throw new Error("'#' suelto en línea " + this.line + ": solo se admiten directivas como #include");
+          }
         }
         // Comments
         if (ch === '/' && this.src[this.pos + 1] === '/') {
@@ -38,10 +44,14 @@
           continue;
         }
         if (ch === '/' && this.src[this.pos + 1] === '*') {
+          let startLine = this.line;
           this.pos += 2;
           while (this.pos < this.src.length && !(this.src[this.pos] === '*' && this.src[this.pos + 1] === '/')) {
             if (this.src[this.pos] === '\n') this.line++;
             this.pos++;
+          }
+          if (this.pos >= this.src.length) {
+            throw new Error('Comentario sin cerrar en línea ' + startLine);
           }
           this.pos += 2; // skip */
           continue;
