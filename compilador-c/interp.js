@@ -29,8 +29,14 @@
         }
         // Preprocessor line
         if (ch === '#') {
-          while (this.pos < this.src.length && this.src[this.pos] !== '\n') this.pos++;
-          continue;
+          let tempPos = this.pos + 1;
+          while (tempPos < this.src.length && (this.src[tempPos] === ' ' || this.src[tempPos] === '\t')) tempPos++;
+          if (tempPos < this.src.length && /[a-zA-Z]/.test(this.src[tempPos])) {
+            while (this.pos < this.src.length && this.src[this.pos] !== '\n') this.pos++;
+            continue;
+          } else {
+            throw new Error("'#' suelto en línea " + this.line + ": solo se admiten directivas como #include");
+          }
         }
         // Comments
         if (ch === '/' && this.src[this.pos + 1] === '/') {
@@ -38,10 +44,14 @@
           continue;
         }
         if (ch === '/' && this.src[this.pos + 1] === '*') {
+          let startLine = this.line;
           this.pos += 2;
           while (this.pos < this.src.length && !(this.src[this.pos] === '*' && this.src[this.pos + 1] === '/')) {
             if (this.src[this.pos] === '\n') this.line++;
             this.pos++;
+          }
+          if (this.pos >= this.src.length) {
+            throw new Error('Comentario sin cerrar en línea ' + startLine);
           }
           this.pos += 2; // skip */
           continue;
@@ -51,7 +61,15 @@
           let start = this.pos;
           while (this.pos < this.src.length && /[a-zA-Z0-9_]/.test(this.src[this.pos])) this.pos++;
           const word = this.src.slice(start, this.pos);
-          const keywords = new Set(['int','char','float','double','void','if','else','while','do','for','break','continue','return','const','static','long','unsigned','short','struct','switch','scanf']);
+
+          if (['enum', 'typedef', 'sizeof', 'strlen'].includes(word)) {
+            this.error(`'${word}' no soportado`);
+          }
+          if (word === 'long' && tokens.length > 0 && tokens[tokens.length - 1].type === 'keyword' && tokens[tokens.length - 1].value === 'long') {
+            this.error("'long long' no soportado");
+          }
+
+          const keywords = new Set(['int','char','float','double','void','if','else','while','do','for','break','continue','return','const','static','long','unsigned','short','struct','switch']);
           tokens.push({ type: keywords.has(word) ? 'keyword' : 'identifier', value: word, line: this.line });
           continue;
         }
@@ -60,12 +78,28 @@
           let start = this.pos;
           let isFloat = false;
           while (this.pos < this.src.length && /[0-9]/.test(this.src[this.pos])) this.pos++;
+
+          if (this.src.slice(start, this.pos) === '0' && this.pos < this.src.length && (this.src[this.pos] === 'x' || this.src[this.pos] === 'X')) {
+            this.error("Hexadecimales (0x) no soportados");
+          }
+
           if (this.pos < this.src.length && this.src[this.pos] === '.') {
             isFloat = true;
             this.pos++;
             while (this.pos < this.src.length && /[0-9]/.test(this.src[this.pos])) this.pos++;
           }
-          // exponent? not supported
+
+          if (this.pos < this.src.length && (this.src[this.pos] === 'e' || this.src[this.pos] === 'E')) {
+            let next = this.pos + 1;
+            if (next < this.src.length && (/[0-9]/.test(this.src[next]) || ( (this.src[next] === '+' || this.src[next] === '-') && next + 1 < this.src.length && /[0-9]/.test(this.src[next+1]) ))) {
+              this.error("Notación exponencial (1e5) no soportada");
+            }
+          }
+
+          if (this.pos < this.src.length && /[fFlLuU]/.test(this.src[this.pos])) {
+            this.error("Sufijos (1.0f, 1L) no soportados");
+          }
+
           const text = this.src.slice(start, this.pos);
           tokens.push({ type: 'number', value: isFloat ? parseFloat(text) : parseInt(text, 10), line: this.line, isFloat: isFloat });
           continue;
@@ -574,7 +608,7 @@
       if (tok.type === 'identifier') {
         this.next();
         if (tok.value === 'scanf') {
-          throw new Error('scanf no soportado (línea ' + line + ')');
+          throw new Error('scanf no soportado en línea ' + line);
         }
         return { type: 'Identifier', name: tok.value, line };
       }
@@ -905,7 +939,6 @@
       if (funcName === 'printf') return this.builtinPrintf(args, callExpr.line);
       if (funcName === 'puts') return this.builtinPuts(args, callExpr.line);
       if (funcName === 'putchar') return this.builtinPutchar(args, callExpr.line);
-      if (funcName === 'scanf') throw new InterpreterError('scanf no soportado', this.currentLine);
       const func = this.functions[funcName];
       if (!func) throw new InterpreterError(`Función '${funcName}' no definida`, this.currentLine);
       return this.callUserFunction(func, args);
