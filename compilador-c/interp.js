@@ -646,6 +646,7 @@
       this.output = '';
       this.steps = [];
       this.stepCount = 0;
+      this.instantaneas = new Map(); // última instantánea de cada variable (clave: función + nombre)
       this.maxSteps = 50000;
       this.maxDepth = 200;
       this.profundidadMax = 0;
@@ -915,7 +916,6 @@
       return 'int';
     }
 
-    isArray(val) { return Array.isArray(val); }
     isFloatType(ty) { return ty === 'float'; }
 
     // ---------- Function calls ----------
@@ -1171,22 +1171,10 @@
     builtinPrintf(args, line) {
       if (args.length === 0) return 0;
       const formatArg = args[0];
-      let formatStr;
-      if (typeof formatArg === 'number') {
-        // assume char code? not useful
-        formatStr = String.fromCharCode(formatArg);
-      } else if (Array.isArray(formatArg)) {
-        formatStr = this.arrayToString(formatArg);
-      } else {
-        // if it's a string literal? not possible, but maybe from variable
-        const v = this.lookupVariable(formatArg);
-        if (v) {
-          if (v.arr) formatStr = this.arrayToString(v.value);
-          else formatStr = String.fromCharCode(v.value);
-        } else {
-          formatStr = String(formatArg);
-        }
-      }
+      // evalArg solo entrega números (código de carácter) o arreglos de códigos (cadenas).
+      const formatStr = Array.isArray(formatArg)
+        ? this.arrayToString(formatArg)
+        : String.fromCharCode(formatArg);
       let argIndex = 1;
       let out = '';
       for (let i = 0; i < formatStr.length; i++) {
@@ -1272,7 +1260,7 @@
       if (args.length === 0) return 0;
       const ch = Math.trunc(args[0]) & 0xFF;
       this.output += String.fromCharCode(ch);
-      return args[0];
+      return ch;
     }
 
     arrayToString(arr) {
@@ -1285,6 +1273,31 @@
     }
 
     // ---------- Step recording ----------
+    // Instantánea de una variable para la traza. Si su valor no cambió desde la última
+    // instantánea de esa misma variable, se reutiliza ese objeto: así no se copia de nuevo el arreglo.
+    instantaneaVariable(fn, name, v) {
+      const clave = (fn === null ? '' : fn) + '\u0000' + name;
+      const previa = this.instantaneas.get(clave);
+      if (previa && previa.ty === v.ty && previa.arr === v.arr && this.mismoValor(previa.v, v.value)) {
+        return previa;
+      }
+      const nueva = { name, fn, ty: v.ty, arr: v.arr, v: v.arr ? v.value.slice() : v.value };
+      this.instantaneas.set(clave, nueva);
+      return nueva;
+    }
+
+    // Compara el valor guardado en una instantánea con el valor vivo (número o arreglo).
+    mismoValor(guardado, vivo) {
+      if (Array.isArray(vivo)) {
+        if (!Array.isArray(guardado) || guardado.length !== vivo.length) return false;
+        for (let i = 0; i < vivo.length; i++) {
+          if (!Object.is(guardado[i], vivo[i])) return false;
+        }
+        return true;
+      }
+      return Object.is(guardado, vivo);
+    }
+
     recordStep(line) {
       this.stepCount++;
       if (this.stepCount > this.maxSteps) {
@@ -1303,13 +1316,7 @@
           for (const [name, v] of map) {
             if (seen.has(name)) continue;
             seen.add(name);
-            vars.push({
-              name,
-              fn: fnName,
-              ty: v.ty,
-              arr: v.arr,
-              v: v.arr ? v.value.slice() : v.value
-            });
+            vars.push(this.instantaneaVariable(fnName, name, v));
           }
         }
       }
@@ -1317,13 +1324,7 @@
       for (const [name, v] of this.globals) {
         if (seen.has(name)) continue;
         seen.add(name);
-        vars.push({
-          name,
-          fn: null,
-          ty: v.ty,
-          arr: v.arr,
-          v: v.arr ? v.value.slice() : v.value
-        });
+        vars.push(this.instantaneaVariable(null, name, v));
       }
       this.steps.push({
         line,

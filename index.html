@@ -6,10 +6,20 @@
   <title>Chuchulucos</title>
   <meta name="description" content="Chuchulucos: apps pequeñas y útiles para generar códigos QR, aprender pseudocódigo y programar en C.">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // Tema guardado: se aplica antes de pintar. Si localStorage no está disponible, manda el tema del sistema.
+    try {
+      const temaGuardado = localStorage.getItem('chuchulucos-tema');
+      if (temaGuardado === 'light' || temaGuardado === 'dark') {
+        document.documentElement.setAttribute('data-theme', temaGuardado);
+      }
+    } catch (e) { /* sin acceso a localStorage: se usa el tema del sistema */ }
+  </script>
 </head>
 <body>
   <header class="top">
-    <a class="logo" href="/">chuchulucos<span>.shop</span></a>
+    <a class="logo" href="index.html">chuchulucos<span>.shop</span></a>
+    <button id="theme-btn" class="theme-btn" type="button" aria-pressed="false" aria-label="Tema oscuro">◐ Tema oscuro</button>
   </header>
 
   <main>
@@ -31,6 +41,7 @@
       <article class="card">
         <h2>Programación en C</h2>
         <p>Practica C con ejemplos, ejercicios y ayuda para entender el código.</p>
+        <p><a class="logo" href="compilador-c/index.html">Abrir el compilador de C</a></p>
       </article>
     </section>
   </main>
@@ -38,5 +49,33 @@
   <footer class="foot">
     <p>&copy; 2026 chuchulucos.shop</p>
   </footer>
+
+  <script>
+    // Interruptor de tema: alterna data-theme en <html> y recuerda la elección si el navegador lo permite.
+    const themeBtn = document.getElementById('theme-btn');
+    const temaSistema = window.matchMedia('(prefers-color-scheme: dark)');
+    function temaEfectivo() {
+      const forzado = document.documentElement.getAttribute('data-theme');
+      if (forzado === 'light' || forzado === 'dark') return forzado;
+      return temaSistema.matches ? 'dark' : 'light';
+    }
+    function pintarTema() {
+      themeBtn.setAttribute('aria-pressed', String(temaEfectivo() === 'dark'));
+    }
+    themeBtn.addEventListener('click', () => {
+      const nuevo = temaEfectivo() === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', nuevo);
+      try {
+        localStorage.setItem('chuchulucos-tema', nuevo);
+      } catch (e) { /* sin persistencia: el interruptor sigue funcionando en esta página */ }
+      pintarTema();
+    });
+    if (temaSistema.addEventListener) {
+      temaSistema.addEventListener('change', pintarTema);
+    } else {
+      temaSistema.addListener(pintarTema); // Safari anterior a 14
+    }
+    pintarTema();
+  </script>
 </body>
 </html>
