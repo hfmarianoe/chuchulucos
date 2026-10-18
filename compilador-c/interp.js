@@ -1290,6 +1290,7 @@
 
   // ==================== Public API ====================
   function run(source) {
+    let interpreter = null;
     try {
       const lexer = new Lexer(source);
       const tokens = lexer.tokenize();
@@ -1298,15 +1299,14 @@
       if (!program.functions['main']) {
         throw new InterpreterError('Falta la función main()', 1);
       }
-      const interpreter = new Interpreter(program);
+      interpreter = new Interpreter(program);
       return interpreter.run();
     } catch (e) {
       let errorMessage = e.message || String(e);
       let errorLine = e.line || null;
-      // If it's InterpreterError, line is set; else try to extract line from message
       return {
         ok: false,
-        output: '',
+        output: interpreter ? interpreter.output : '',
         error: errorMessage,
         errorLine: errorLine,
         steps: []
