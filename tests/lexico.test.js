@@ -62,7 +62,7 @@ test('M6 exponente con signo 2.5E-3 da aviso explícito', () => {
 test('M6 sufijo f en 1.0f da aviso explícito', () => {
   const r = run(`int main(){\n    float f = 1.0f;\n    return 0;\n}`);
   assert.strictEqual(r.ok, false);
-  assert.match(r.error, /Sufijos \(1\.0f, 1L\) no soportados/);
+  assert.match(r.error, /Sufijos \(1\.0f, 1L, 1u\) no soportados/);
   assert.strictEqual(r.errorLine, 2);
 });
 
@@ -98,4 +98,33 @@ test('M6 los números decimales y enteros normales siguen funcionando', () => {
   const r = run(`int main(){ int x = 10; double d = 1.5; printf("%d %f\\n", x, d); return 0; }`);
   assert.strictEqual(r.ok, true, `falló: ${r.error}`);
   assert.strictEqual(r.output, '10 1.500000\n');
+});
+
+// scanf y strlen son funciones de biblioteca, no palabras reservadas: como variable son válidos.
+test('M4 una variable llamada scanf sigue siendo válida', () => {
+  const r = run(`int main(){ int scanf = 4; printf("%d\\n", scanf); return 0; }`);
+  assert.strictEqual(r.ok, true, `falló: ${r.error}`);
+  assert.strictEqual(r.output, '4\n');
+});
+
+test('M6 una variable llamada strlen sigue siendo válida', () => {
+  const r = run(`int main(){ int strlen = 5; printf("%d\\n", strlen); return 0; }`);
+  assert.strictEqual(r.ok, true, `falló: ${r.error}`);
+  assert.strictEqual(r.output, '5\n');
+});
+
+// M5: un nombre que no es una directiva conocida no debe ignorarse en silencio.
+test('M5 un # con nombre que no es directiva da aviso', () => {
+  const r = run(`#estoNoEsUnaDirectiva\nint main(){ return 0; }`);
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /'#' suelto/);
+  assert.strictEqual(r.errorLine, 1);
+});
+
+// M5: el nombre de la directiva es el identificador completo; #include123 no es #include.
+test('M5 #include123 no se acepta como directiva', () => {
+  const r = run(`#include123\nint main(){ return 0; }`);
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /'#' suelto/);
+  assert.strictEqual(r.errorLine, 1);
 });

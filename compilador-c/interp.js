@@ -31,12 +31,13 @@
         if (ch === '#') {
           let tempPos = this.pos + 1;
           while (tempPos < this.src.length && (this.src[tempPos] === ' ' || this.src[tempPos] === '\t')) tempPos++;
-          if (tempPos < this.src.length && /[a-zA-Z]/.test(this.src[tempPos])) {
+          const nombre = /^[A-Za-z_][A-Za-z0-9_]*/.exec(this.src.slice(tempPos));
+          const directivas = ['include', 'define', 'undef', 'if', 'ifdef', 'ifndef', 'elif', 'else', 'endif', 'pragma', 'error', 'line'];
+          if (nombre && directivas.includes(nombre[0])) {
             while (this.pos < this.src.length && this.src[this.pos] !== '\n') this.pos++;
             continue;
-          } else {
-            throw new Error("'#' suelto en línea " + this.line + ": solo se admiten directivas como #include");
           }
+          throw new Error("'#' suelto en línea " + this.line + ": solo se admiten directivas como #include o #define");
         }
         // Comments
         if (ch === '/' && this.src[this.pos + 1] === '/') {
@@ -62,7 +63,7 @@
           while (this.pos < this.src.length && /[a-zA-Z0-9_]/.test(this.src[this.pos])) this.pos++;
           const word = this.src.slice(start, this.pos);
 
-          if (['enum', 'typedef', 'sizeof', 'strlen'].includes(word)) {
+          if (['enum', 'typedef', 'sizeof'].includes(word)) {
             this.error(`'${word}' no soportado`);
           }
           if (word === 'long' && tokens.length > 0 && tokens[tokens.length - 1].type === 'keyword' && tokens[tokens.length - 1].value === 'long') {
@@ -97,7 +98,7 @@
           }
 
           if (this.pos < this.src.length && /[fFlLuU]/.test(this.src[this.pos])) {
-            this.error("Sufijos (1.0f, 1L) no soportados");
+            this.error("Sufijos (1.0f, 1L, 1u) no soportados");
           }
 
           const text = this.src.slice(start, this.pos);
@@ -573,6 +574,10 @@
           this.expectOp(']');
           expr = { type: 'Index', array: expr, index, line: expr.line };
         } else if (this.matchOp('(')) {
+          if (expr.type === 'Identifier' && (expr.name === 'scanf' || expr.name === 'strlen')) {
+            const aviso = expr.name === 'scanf' ? 'scanf no soportado' : "'strlen' no soportado";
+            throw new Error(aviso + ' en línea ' + expr.line);
+          }
           const args = [];
           if (!this.isOp(')')) {
             while (true) {
@@ -607,9 +612,6 @@
       }
       if (tok.type === 'identifier') {
         this.next();
-        if (tok.value === 'scanf') {
-          throw new Error('scanf no soportado en línea ' + line);
-        }
         return { type: 'Identifier', name: tok.value, line };
       }
       if (this.matchOp('(')) {
