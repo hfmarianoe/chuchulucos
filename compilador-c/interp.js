@@ -883,6 +883,14 @@
     isFloatType(ty) { return ty === 'float'; }
 
     // ---------- Function calls ----------
+    evalArg(arg) {
+      if (arg.type === 'Identifier') {
+        const v = this.lookupVariable(arg.name);
+        if (v && v.arr) return v.value;
+      }
+      return this.evalExpr(arg);
+    }
+
     evalCall(callExpr) {
       const callee = callExpr.callee;
       let funcName;
@@ -892,7 +900,7 @@
         throw new InterpreterError('Llamada a función no válida', this.currentLine);
       }
       // Evaluate arguments
-      const args = callExpr.args.map(arg => this.evalExpr(arg));
+      const args = callExpr.args.map(arg => this.evalArg(arg));
       // Builtins
       if (funcName === 'printf') return this.builtinPrintf(args, callExpr.line);
       if (funcName === 'puts') return this.builtinPuts(args, callExpr.line);
@@ -920,8 +928,7 @@
         const arg = args[i];
         if (p.isArray) {
           if (!Array.isArray(arg)) throw new InterpreterError(`El parámetro ${p.name} espera un arreglo`, this.currentLine);
-          const arrCopy = arg.slice();
-          frame.scopeStack[0].set(p.name, { ty: p.type, arr: true, value: arrCopy });
+          frame.scopeStack[0].set(p.name, { ty: p.type, arr: true, value: arg });
         } else {
           const val = this.convertTo(p.type, arg);
           frame.scopeStack[0].set(p.name, { ty: p.type, arr: false, value: val });
