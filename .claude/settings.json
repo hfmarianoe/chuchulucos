@@ -63,6 +63,7 @@
     "ponytail@ponytail": true,
     "agent-skills@addy-agent-skills": true,
     "octo@nyldn-plugins": true,
-    "pro-workflow@pro-workflow": true
+    "pro-workflow@pro-workflow": true,
+    "claude-code-setup@claude-plugins-official": true
   }
 }
