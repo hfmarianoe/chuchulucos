@@ -51,11 +51,18 @@
         "source": "github",
         "repo": "nyldn/claude-octopus"
       }
+    },
+    "pro-workflow": {
+      "source": {
+        "source": "github",
+        "repo": "rohitg00/pro-workflow"
+      }
     }
   },
   "enabledPlugins": {
     "ponytail@ponytail": true,
     "agent-skills@addy-agent-skills": true,
-    "octo@nyldn-plugins": true
+    "octo@nyldn-plugins": true,
+    "pro-workflow@pro-workflow": true
   }
 }
