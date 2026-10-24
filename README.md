@@ -12,8 +12,8 @@ Sitio estático de presentación de las apps de Chuchulucos. Se publica en HostG
 - `tests/`: pruebas de Node (`*.test.js`) del intérprete y de los HTML.
 - `plugins/flujo-desarrollo/`: plugin de Claude Code para el flujo de desarrollo asistido por modelos. No forma parte del sitio.
 - `AUDITORIA.md`: pendientes abiertos de la auditoría.
-- `herramientas/` y `docs/markitdown.md`: instalador y guía de markitdown (convierte documentos a Markdown), para local y para el chat. Ver `docs/markitdown.md`.
-- `.claude/`: hook de inicio de sesión que instala markitdown en la nube.
+- `herramientas/` y `docs/`: instalador y guías de markitdown, YouTube Agent Skill y Ponytail, para local y para el chat.
+- `.claude/`: hook de inicio de sesión (instala markitdown en la nube), skills `yt-*` de YouTube y el plugin Ponytail. Ver `docs/`.
 
 ## Apps
 
