@@ -4,7 +4,7 @@ Skill que hace las respuestas del agente amigables para lectores con TDAH: acci�
 
 ## Instalación
 
-Como skill `i-have-adhd` en `.claude/skills/i-have-adhd/` (solo Markdown). Aplica en el chat (nube) y en local con `git pull`. No se copiaron los hooks del proyecto original; la skill se activa por su descripción o al invocarla.
+Como skill `i-have-adhd` en `.claude/skills/i-have-adhd/` (solo Markdown). Aplica en el chat (nube) y en local con `git pull`. No se copiaron los hooks del proyecto original; la skill solo se activa cuando la invocas con `/i-have-adhd` y se mantiene hasta que digas «stop adhd mode».
 
 Para activarla siempre en todos tus proyectos: `cp -r .claude/skills/i-have-adhd ~/.claude/skills/`.
 
