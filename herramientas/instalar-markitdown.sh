@@ -1,12 +1,8 @@
 #!/bin/bash
-# Instala microsoft/markitdown (convierte PDF, Office, HTML, etc. a Markdown).
+# Instala las herramientas de línea de comandos del repo: markitdown (convierte
+# PDF, Office, HTML, etc. a Markdown) y graphify (grafo de conocimiento del código).
 # Sirve en local y en sesiones de Claude Code. Es idempotente.
 set -euo pipefail
-
-if command -v markitdown >/dev/null 2>&1; then
-  echo "markitdown ya instalado: $(markitdown --version)"
-  exit 0
-fi
 
 PY=$(command -v python3 || command -v python || true)
 if [ -z "$PY" ]; then
@@ -14,10 +10,18 @@ if [ -z "$PY" ]; then
   exit 1
 fi
 
-if command -v pipx >/dev/null 2>&1 && [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
-  pipx install 'markitdown[all]'
-else
-  "$PY" -m pip install --quiet 'markitdown[all]'
-fi
+instalar() { # $1 = comando, $2 = paquete de PyPI
+  if command -v "$1" >/dev/null 2>&1; then
+    echo "$1 ya instalado"
+    return
+  fi
+  if command -v pipx >/dev/null 2>&1 && [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
+    pipx install "$2"
+  else
+    "$PY" -m pip install --quiet "$2"
+  fi
+  echo "$1 instalado"
+}
 
-echo "markitdown instalado: $(markitdown --version)"
+instalar markitdown 'markitdown[all]'
+instalar graphify graphifyy   # el paquete oficial lleva doble "y"
