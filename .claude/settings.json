@@ -45,10 +45,17 @@
         "source": "github",
         "repo": "addyosmani/agent-skills"
       }
+    },
+    "nyldn-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "nyldn/claude-octopus"
+      }
     }
   },
   "enabledPlugins": {
     "ponytail@ponytail": true,
-    "agent-skills@addy-agent-skills": true
+    "agent-skills@addy-agent-skills": true,
+    "octo@nyldn-plugins": true
   }
 }
