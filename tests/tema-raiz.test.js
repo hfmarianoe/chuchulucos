@@ -39,3 +39,13 @@ test('B13 el enlace al compilador usa una clase propia con color de acento y sub
   assert.match(estilo, /\.enlace-app\s*\{[^}]*color:\s*var\(--accent-text\)/);
   assert.match(estilo, /\.enlace-app\s*\{[^}]*text-decoration:\s*underline/);
 });
+
+// B14: cada token de la paleta oscura se escribe una sola vez por archivo.
+test('B14 style.css escribe la paleta oscura una sola vez', () => {
+  assert.strictEqual((estilo.match(/#161614/g) || []).length, 1);
+});
+
+test('B14 compilador-c/index.html escribe la paleta oscura una sola vez', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'compilador-c', 'index.html'), 'utf8');
+  assert.strictEqual((html.match(/#1e1e1e/g) || []).length, 1);
+});

@@ -41,9 +41,10 @@ test('B5 style.css y el compilador declaran color-scheme light dark en :root', (
 });
 
 test('B5 los dos archivos tienen el modo oscuro guardado por data-theme', () => {
+  // El sistema decide con color-scheme: light dark; data-theme="dark" fuerza el oscuro.
   for (const css of [estilosRaiz, bloqueEstilo]) {
-    assert.match(css, /@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)/);
-    assert.match(css, /:root\[data-theme="dark"\]\s*\{/);
+    assert.match(css, /color-scheme:\s*light dark/);
+    assert.match(css, /:root\[data-theme="dark"\]\s*\{\s*color-scheme:\s*dark/);
   }
 });
 
