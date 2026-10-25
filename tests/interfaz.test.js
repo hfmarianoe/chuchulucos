@@ -68,3 +68,9 @@ test('hay medidores de variables, anidamiento y profundidad con sus topes', () =
   assert.match(html, /role="meter"[^>]*aria-valuemax="3"[\s\S]*?id="anid-fill"/);
   assert.match(html, /role="meter"[^>]*aria-valuemax="200"[\s\S]*?id="prof-fill"/);
 });
+
+// M11: el textarea del editor debe tener nombre accesible para lectores de pantalla.
+test('M11 el textarea del editor tiene etiqueta accesible', () => {
+  assert.match(html, /<label class="sr-only" for="code">Código C<\/label>/);
+  assert.match(html, /<textarea id="code"/);
+});
