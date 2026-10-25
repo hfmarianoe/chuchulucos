@@ -42,6 +42,9 @@
         if (this.isOp('(')) {
           // function definition
           const func = this.parseFunctionRest(typeInfo.ty, nameTok.value, nameTok.line);
+          if (functions[func.name]) {
+            throw new Error(`Función '${func.name}' ya definida en línea ${func.line}`);
+          }
           functions[func.name] = func;
         } else {
           // global variable declaration
