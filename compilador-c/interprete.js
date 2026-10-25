@@ -586,11 +586,14 @@
           }
           precision = precStr ? parseInt(precStr, 10) : 0;
         }
+        if (width > 1000) throw new InterpreterError('Ancho de printf fuera de rango (máximo 1000)', line);
+        if (precision > 100) throw new InterpreterError('Precisión de printf fuera de rango (máximo 100)', line);
         const conv = formatStr[i];
         if (conv === '%') {
           out += '%';
           continue;
         }
+        if (argIndex >= args.length) throw new InterpreterError(`printf: falta un argumento para %${conv}`, line);
         const val = args[argIndex];
         argIndex++;
         let formatted = '';

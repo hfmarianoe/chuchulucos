@@ -37,3 +37,30 @@ test('un especificador printf no soportado sigue produciendo error', () => {
   assert.strictEqual(r.ok, false);
   assert.match(r.error, /Formato printf no soportado/);
 });
+
+// B9: printf valida ancho, precisión y argumentos con mensajes del intérprete, no de JavaScript.
+test('B9 una precisión mayor de 100 da error claro del intérprete', () => {
+  const r = run('int main(){ printf("%.200f", 1.0); return 0; }');
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Precisión de printf fuera de rango/);
+  assert.strictEqual(r.errorLine, 1);
+});
+
+test('B9 un ancho mayor de 1000 da error claro del intérprete', () => {
+  const r = run('int main(){ printf("%1001d", 1); return 0; }');
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Ancho de printf fuera de rango/);
+});
+
+test('B9 precisión 100 y ancho 1000 siguen siendo válidos', () => {
+  const r = run('int main(){ printf("%.100f|%1000d", 1.0, 1); return 0; }');
+  assert.strictEqual(r.ok, true, r.error);
+  assert.strictEqual(r.output.length, 102 + 1000 + 1);
+});
+
+test('B9 un %s sin argumento da error claro, no "undefined"', () => {
+  const r = run('int main(){ printf("%s"); return 0; }');
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /falta un argumento para %s/);
+  assert.strictEqual(r.errorLine, 1);
+});
