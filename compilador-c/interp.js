@@ -35,7 +35,7 @@ if (typeof require === 'function' && typeof module !== 'undefined') {
         output: interpreter ? interpreter.output : '',
         error: errorMessage,
         errorLine: errorLine,
-        steps: [],
+        steps: interpreter ? interpreter.steps : [],
         pasos: interpreter ? interpreter.stepCount : 0,
         limite: interpreter ? interpreter.maxSteps : null,
         profundidad: interpreter ? interpreter.profundidadMax : 0
