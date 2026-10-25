@@ -8,3 +8,18 @@ test('A4 error de sintaxis expone errorLine', () => {
   assert.strictEqual(r.ok, false);
   assert.strictEqual(r.errorLine, 3);
 });
+
+// M10: un prototipo no se acepta como función vacía; el error debe venir del intérprete, con su línea.
+test('M10 un prototipo con parámetros da error claro con su línea', () => {
+  const r = run('int f(int x);\nint main(){ return 0; }');
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Prototipo de 'f' no soportado/);
+  assert.strictEqual(r.errorLine, 1);
+});
+
+test('M10 un prototipo sin parámetros también da error claro', () => {
+  const r = run('int main(){ return g(); }\nint g();');
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Prototipo de 'g' no soportado/);
+  assert.strictEqual(r.errorLine, 2);
+});

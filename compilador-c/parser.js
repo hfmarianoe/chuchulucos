@@ -105,6 +105,9 @@
       } else {
         this.next();
       }
+      if (this.isOp(';')) {
+        throw new Error(`Prototipo de '${name}' no soportado en línea ${line}: escribe la función completa`);
+      }
       const body = this.parseStatement(); // should be a Block
       return { type: 'function', name, returnType, params, body, line };
     }
