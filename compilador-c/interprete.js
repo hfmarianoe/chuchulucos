@@ -186,7 +186,7 @@
         } else {
           const cur = this.getLValValue(lval);
           const op = expr.op.slice(0, -1);
-          newVal = this.applyBinary(op, cur, rval, expr.line);
+          newVal = this.applyBinary(op, cur, rval, expr.line, lval.ty === 'float');
         }
         newVal = this.convertTo(lval.ty, newVal);
         this.setLValValue(lval, newVal);
@@ -257,8 +257,7 @@
       }
     }
 
-    applyBinary(op, left, right, line) {
-      const useFloat = typeof left === 'number' && !Number.isInteger(left) || typeof right === 'number' && !Number.isInteger(right);
+    applyBinary(op, left, right, line, useFloat) {
       switch (op) {
         case '+': return useFloat ? left + right : (left + right) | 0;
         case '-': return useFloat ? left - right : (left - right) | 0;
