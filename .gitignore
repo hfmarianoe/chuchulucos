@@ -1,3 +1,6 @@
 
 # Estado operativo de OMC (locks, cooldowns y sesiones de esta PC)
 .omc/state/
+
+# Salida de graphify (caché de sesión y grafo local)
+graphify-out/
