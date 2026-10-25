@@ -21,6 +21,13 @@ test('M12 la publicación indica que se sube la carpeta compilador-c/ completa',
   assert.match(readme, /no basta con `interp\.js`|no solo `interp\.js`/);
 });
 
+// B16: AUDITORIA.md no debe pedir borrar ramas que ya se borraron.
+test('B16 AUDITORIA.md no tiene la instrucción de borrar ramas', () => {
+  const auditoria = fs.readFileSync(path.join(raiz, 'AUDITORIA.md'), 'utf8');
+  assert.doesNotMatch(auditoria, /borra en GitHub estas ramas/);
+  assert.doesNotMatch(auditoria, /fix\/pendientes-b2-b7/);
+});
+
 // B19: el README debe describir el comando de OpenCode, que ahora existe.
 test('B19 el README describe .opencode/commands/auditoria.md', () => {
   assert.ok(fs.existsSync(path.join(raiz, '.opencode', 'commands', 'auditoria.md')));

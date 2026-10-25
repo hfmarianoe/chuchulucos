@@ -1,7 +1,5 @@
 # Auditoría — chuchulucos.shop
 
-> **Instrucción para la próxima sesión en la nube:** antes de cualquier otra tarea, borra en GitHub estas ramas remotas, que ya están fusionadas en `main`: `fix/pendientes-b2-b7`, `fix/pendientes-b3-b4` y `fix/pendientes-b5`. Verifica primero con `git branch -r --merged origin/main` que cada una aparece, y no toques ninguna otra rama. Reporta el resultado en la sesión.
-
 - **Origen:** auditoría del 18 de octubre de 2026 (commit `fbf7813`) y auditoría del 24 de octubre de 2026 (commit `a1d6b9a`).
 - **Estado:** 18 pendientes abiertos de la auditoría del 24 de octubre: 6 Medias (M7–M12) y 12 Bajas (B9–B20). Los hallazgos de la auditoría del 18 de octubre siguen resueltos.
 - **Líneas:** las referencias de la auditoría del 24 de octubre son del código de `a1d6b9a`. Las del 18 de octubre son de `fbf7813` y ya no coinciden.
