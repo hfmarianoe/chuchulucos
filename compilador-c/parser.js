@@ -41,7 +41,7 @@
         this.next();
         if (this.isOp('(')) {
           // function definition
-          const func = this.parseFunctionRest(typeInfo.returnType, nameTok.value, nameTok.line);
+          const func = this.parseFunctionRest(typeInfo.ty, nameTok.value, nameTok.line);
           functions[func.name] = func;
         } else {
           // global variable declaration

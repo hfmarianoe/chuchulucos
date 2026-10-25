@@ -281,6 +281,12 @@
         return 'int';
       }
       if (expr.type === 'StringLiteral') return 'char';
+      if (expr.type === 'Call' && expr.callee.type === 'Identifier') {
+        const func = this.functions[expr.callee.name];
+        return func ? func.returnType : 'int';
+      }
+      if (expr.type === 'Assign') return this.getExprType(expr.left);
+      if (expr.type === 'Index') return this.getExprType(expr.array);
       if (expr.type === 'Unary') return expr.op === '!' ? 'int' : this.getExprType(expr.operand);
       if (expr.type === 'Binary') {
         if (['==', '!=', '<', '>', '<=', '>=', '&&', '||'].includes(expr.op)) return 'int';
