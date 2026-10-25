@@ -1,7 +1,7 @@
 ---
 description: Configura el flujo de desarrollo (wizard de 7 pasos)
 ---
-Configura el flujo en el orden del spec (`docs/plugin-flujo/spec.md`). Antes de preguntar, corre `bash "${CLAUDE_PLUGIN_ROOT}/scripts/detectar-claves.sh"` para saber qué APIs están disponibles. Nunca muestres valores de claves.
+Configura el flujo en el orden del spec (`docs/plugin-flujo/spec.md`, que todavía no está en el repo). Antes de preguntar, corre `bash "${CLAUDE_PLUGIN_ROOT}/scripts/detectar-claves.sh"` para saber qué APIs están disponibles. Nunca muestres valores de claves.
 
 Pasos y defaults:
 1. Estudio: solo Claude (Haiku, Sonnet, Opus). Default **Haiku**.
