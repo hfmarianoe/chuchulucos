@@ -6,4 +6,4 @@ Haz una auditoría general del proyecto actual con el modelo configurado en el p
 Reglas:
 - Cada hallazgo alto o medio se verifica contra el código antes de reportarse. Cita archivo:línea.
 - Marca como "a verificar" lo que dependa de algo fuera del repo.
-- Guarda el informe en `docs/plugin-flujo/auditorias/` con la fecha.
+- Guarda el informe en `docs/auditorias/` con la fecha.

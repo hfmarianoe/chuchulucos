@@ -1,6 +1,6 @@
 # flujo-desarrollo (v0.1.0)
 
-Plugin del flujo de desarrollo descrito en `docs/plugin-flujo/spec.md`.
+Plugin del flujo de desarrollo descrito en `docs/plugin-flujo/spec.md`, que todavía no está en el repo.
 
 Comandos: `/flujo-desarrollo:configurar`, `/flujo-desarrollo:ejecutar`, `/flujo-desarrollo:auditar`.
 

@@ -41,7 +41,10 @@
         this.next();
         if (this.isOp('(')) {
           // function definition
-          const func = this.parseFunctionRest(typeInfo.returnType, nameTok.value, nameTok.line);
+          const func = this.parseFunctionRest(typeInfo.ty, nameTok.value, nameTok.line);
+          if (functions[func.name]) {
+            throw new Error(`Función '${func.name}' ya definida en línea ${func.line}`);
+          }
           functions[func.name] = func;
         } else {
           // global variable declaration
@@ -104,6 +107,9 @@
         this.expectOp(')');
       } else {
         this.next();
+      }
+      if (this.isOp(';')) {
+        throw new Error(`Prototipo de '${name}' no soportado en línea ${line}: escribe la función completa`);
       }
       const body = this.parseStatement(); // should be a Block
       return { type: 'function', name, returnType, params, body, line };

@@ -135,3 +135,11 @@ test('la salida de cada paso es el texto impreso hasta ese momento', () => {
   }
   assert.strictEqual(previa, r.output);
 });
+
+// B20: ante un error, run() devuelve los pasos ejecutados hasta el fallo, no una lista vacía.
+test('B20 ante un error, run() devuelve los pasos ejecutados hasta el fallo', () => {
+  const r = run('int main(){\n    int x = 1;\n    x = 2;\n    return 1 / 0;\n}');
+  assert.strictEqual(r.ok, false);
+  assert.ok(r.steps.length >= 2, `pasos devueltos: ${r.steps.length}`);
+  assert.strictEqual(r.steps[0].line, 2);
+});

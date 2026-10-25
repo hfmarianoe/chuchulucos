@@ -186,7 +186,7 @@
         } else {
           const cur = this.getLValValue(lval);
           const op = expr.op.slice(0, -1);
-          newVal = this.applyBinary(op, cur, rval, expr.line);
+          newVal = this.applyBinary(op, cur, rval, expr.line, lval.ty === 'float');
         }
         newVal = this.convertTo(lval.ty, newVal);
         this.setLValValue(lval, newVal);
@@ -257,8 +257,7 @@
       }
     }
 
-    applyBinary(op, left, right, line) {
-      const useFloat = typeof left === 'number' && !Number.isInteger(left) || typeof right === 'number' && !Number.isInteger(right);
+    applyBinary(op, left, right, line, useFloat) {
       switch (op) {
         case '+': return useFloat ? left + right : (left + right) | 0;
         case '-': return useFloat ? left - right : (left - right) | 0;
@@ -281,6 +280,12 @@
         return 'int';
       }
       if (expr.type === 'StringLiteral') return 'char';
+      if (expr.type === 'Call' && expr.callee.type === 'Identifier') {
+        const func = this.functions[expr.callee.name];
+        return func ? func.returnType : 'int';
+      }
+      if (expr.type === 'Assign') return this.getExprType(expr.left);
+      if (expr.type === 'Index') return this.getExprType(expr.array);
       if (expr.type === 'Unary') return expr.op === '!' ? 'int' : this.getExprType(expr.operand);
       if (expr.type === 'Binary') {
         if (['==', '!=', '<', '>', '<=', '>=', '&&', '||'].includes(expr.op)) return 'int';
@@ -581,11 +586,14 @@
           }
           precision = precStr ? parseInt(precStr, 10) : 0;
         }
+        if (width > 1000) throw new InterpreterError('Ancho de printf fuera de rango (máximo 1000)', line);
+        if (precision > 100) throw new InterpreterError('Precisión de printf fuera de rango (máximo 100)', line);
         const conv = formatStr[i];
         if (conv === '%') {
           out += '%';
           continue;
         }
+        if (argIndex >= args.length) throw new InterpreterError(`printf: falta un argumento para %${conv}`, line);
         const val = args[argIndex];
         argIndex++;
         let formatted = '';

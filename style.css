@@ -1,40 +1,20 @@
 :root {
   color-scheme: light dark;
-  --bg: #f7f5ef;
-  --fg: #1d1d1b;
-  --muted: #5d5b55;
-  --accent: #e4572e;
-  --accent-text: #b5401a;
-  --card: #ffffff;
-  --line: #e2dfd5;
+  --bg: light-dark(#f7f5ef, #161614);
+  --fg: light-dark(#1d1d1b, #f1efe8);
+  --muted: light-dark(#5d5b55, #a6a398);
+  --accent: light-dark(#e4572e, #ff7a52);
+  --accent-text: light-dark(#b5401a, #ff7a52);
+  --card: light-dark(#ffffff, #1f1f1c);
+  --line: light-dark(#e2dfd5, #34332e);
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #161614;
-    --fg: #f1efe8;
-    --muted: #a6a398;
-    --accent: #ff7a52;
-    --accent-text: #ff7a52;
-    --card: #1f1f1c;
-    --line: #34332e;
-  }
-}
-
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #161614;
-  --fg: #f1efe8;
-  --muted: #a6a398;
-  --accent: #ff7a52;
-  --accent-text: #ff7a52;
-  --card: #1f1f1c;
-  --line: #34332e;
 }
 
 * { box-sizing: border-box; }
@@ -90,6 +70,12 @@ body {
 }
 
 .logo span { color: var(--accent-text); }
+
+.enlace-app {
+  color: var(--accent-text);
+  font-weight: 600;
+  text-decoration: underline;
+}
 
 main {
   flex: 1;

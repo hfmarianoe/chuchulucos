@@ -22,45 +22,23 @@
     <style>
         :root {
             color-scheme: light dark;
-            --bg-color: #ffffff;
-            --text-color: #000;
-            --panel-bg: #f5f5f5;
-            --accent: #007acc;
-            --accent-text: #005a9e;
-            --highlight-bg: rgba(0,122,204,0.1);
-            --error-bg: #ffdddd;
-            --error-line-bg: #ffcccc;
-            --gutter-bg: #e0e0e0;
-            --gutter-color: #555;
-            --var-chip-bg: #ddd;
-            --var-chip-bg-changed: #ffecb3;
-            --border: #ccc;
-            --control-bg: #ffffff;
-            --control-border: #aaa;
-            --warn: #a35f00;
-            --danger: #c62828;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) {
-                color-scheme: dark;
-                --bg-color: #1e1e1e;
-                --text-color: #d4d4d4;
-                --panel-bg: #252525;
-                --accent: #4daafc;
-                --accent-text: #4daafc;
-                --highlight-bg: rgba(77,170,252,0.2);
-                --error-bg: #5a0000;
-                --error-line-bg: #5a0000;
-                --gutter-bg: #2d2d2d;
-                --gutter-color: #aaa;
-                --var-chip-bg: #333;
-                --var-chip-bg-changed: #665c00;
-                --border: #444;
-                --control-bg: #333;
-                --control-border: #666;
-                --warn: #e0a000;
-                --danger: #ef5350;
-            }
+            --bg-color: light-dark(#ffffff, #1e1e1e);
+            --text-color: light-dark(#000, #d4d4d4);
+            --panel-bg: light-dark(#f5f5f5, #252525);
+            --accent: light-dark(#007acc, #4daafc);
+            --accent-text: light-dark(#005a9e, #4daafc);
+            --highlight-bg: light-dark(rgba(0,122,204,0.1), rgba(77,170,252,0.2));
+            --error-bg: light-dark(#ffdddd, #5a0000);
+            --error-line-bg: light-dark(#ffcccc, #5a0000);
+            --gutter-bg: light-dark(#e0e0e0, #2d2d2d);
+            --gutter-color: light-dark(#555, #aaa);
+            --var-chip-bg: light-dark(#ddd, #333);
+            --var-chip-bg-changed: light-dark(#ffecb3, #665c00);
+            --border: light-dark(#ccc, #444);
+            --control-bg: light-dark(#ffffff, #333);
+            --control-border: light-dark(#aaa, #666);
+            --warn: light-dark(#a35f00, #e0a000);
+            --danger: light-dark(#c62828, #ef5350);
         }
         :root[data-theme="light"] {
             color-scheme: light;
@@ -71,23 +49,6 @@
         }
         :root[data-theme="dark"] {
             color-scheme: dark;
-            --bg-color: #1e1e1e;
-            --text-color: #d4d4d4;
-            --panel-bg: #252525;
-            --accent: #4daafc;
-            --accent-text: #4daafc;
-            --highlight-bg: rgba(77,170,252,0.2);
-            --error-bg: #5a0000;
-            --error-line-bg: #5a0000;
-            --gutter-bg: #2d2d2d;
-            --gutter-color: #aaa;
-            --var-chip-bg: #333;
-            --var-chip-bg-changed: #665c00;
-            --border: #444;
-            --control-bg: #333;
-            --control-border: #666;
-            --warn: #e0a000;
-            --danger: #ef5350;
         }
 
         * {
@@ -402,6 +363,7 @@
         <div class="editor-body">
             <div id="gutter"></div>
             <pre id="code-display"></pre>
+            <label class="sr-only" for="code">Código C</label>
             <textarea id="code" spellcheck="false"></textarea>
         </div>
     </div>
@@ -461,7 +423,11 @@
         return temaSistema.matches ? 'dark' : 'light';
     }
     function pintarTema() {
-        themeBtn.setAttribute('aria-pressed', String(temaEfectivo() === 'dark'));
+        const oscuro = temaEfectivo() === 'dark';
+        const nombre = oscuro ? 'Tema oscuro' : 'Tema claro';
+        themeBtn.setAttribute('aria-pressed', String(oscuro));
+        themeBtn.setAttribute('aria-label', nombre);
+        themeBtn.textContent = '◐ ' + nombre;
     }
     themeBtn.addEventListener('click', () => {
         const nuevo = temaEfectivo() === 'dark' ? 'light' : 'dark';
@@ -509,6 +475,30 @@
         return texto.split('\n').length;
     }
 
+    // Recorta un cambio que se pasa del límite de líneas: conserva lo anterior y solo quita las líneas que sobran.
+    function recortarPegado(anterior, nuevo, maxLineas) {
+        let p = 0;
+        const minLen = Math.min(anterior.length, nuevo.length);
+        while (p < minLen && anterior[p] === nuevo[p]) p++;
+        let s = 0;
+        while (s < minLen - p && anterior[anterior.length - 1 - s] === nuevo[nuevo.length - 1 - s]) s++;
+        const insertado = nuevo.slice(p, nuevo.length - s);
+        const base = anterior.slice(0, p) + anterior.slice(anterior.length - s);
+        const saltosPermitidos = Math.max(0, maxLineas - base.split('\n').length);
+        let recortado = insertado;
+        let saltos = 0;
+        for (let i = 0; i < insertado.length; i++) {
+            if (insertado[i] === '\n' && ++saltos > saltosPermitidos) {
+                recortado = insertado.slice(0, i);
+                break;
+            }
+        }
+        return {
+            texto: anterior.slice(0, p) + recortado + anterior.slice(anterior.length - s),
+            pos: p + recortado.length
+        };
+    }
+
     function actualizarCapacidad() {
         const n = contarLineas(code.value);
         const proporcion = n / MAX_LINEAS;
@@ -545,10 +535,11 @@ int main() {
     // Eventos
     code.addEventListener('input', () => {
         if (contarLineas(code.value) > MAX_LINEAS) {
-            // Se pasó del tope (escritura o pegado): volver al último código válido.
-            const pos = Math.max(0, code.selectionStart - 1);
-            code.value = ultimoCodigoValido;
-            code.selectionStart = code.selectionEnd = Math.min(pos, code.value.length);
+            // Se pasó del tope (escritura o pegado): quitar solo las líneas que sobran.
+            const recorte = recortarPegado(ultimoCodigoValido, code.value, MAX_LINEAS);
+            code.value = recorte.texto;
+            code.selectionStart = code.selectionEnd = recorte.pos;
+            statusDisplay.textContent = `Límite de ${MAX_LINEAS} líneas: se recortó lo que sobraba.`;
         }
         ultimoCodigoValido = code.value;
         actualizarCapacidad();

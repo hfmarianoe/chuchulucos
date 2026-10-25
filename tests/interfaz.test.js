@@ -13,7 +13,7 @@ test('M1 el editor sincroniza el scroll con la numeración y el resaltado', () =
 // M2: los colores de error deben venir de variables para que cambien con el tema.
 test('M2 no hay colores de error fijos en el CSS', () => {
   // Solo se permite el color en la definición del token, no en las reglas.
-  assert.doesNotMatch(html.replace(/--error-line-bg:\s*#[0-9a-f]+;/gi, ''), /#ffcccc/i);
+  assert.doesNotMatch(html.replace(/--error-line-bg:\s*(?:light-dark\([^)]*\)|#[0-9a-f]+);/gi, ''), /#ffcccc/i);
   assert.doesNotMatch(html, /#error\s*\{[^}]*color:\s*#000/);
 });
 
@@ -67,4 +67,36 @@ test('hay medidores de variables, anidamiento y profundidad con sus topes', () =
   assert.match(html, /role="meter"[^>]*aria-valuemax="20"[\s\S]*?id="vars-fill"/);
   assert.match(html, /role="meter"[^>]*aria-valuemax="3"[\s\S]*?id="anid-fill"/);
   assert.match(html, /role="meter"[^>]*aria-valuemax="200"[\s\S]*?id="prof-fill"/);
+});
+
+// M11: el textarea del editor debe tener nombre accesible para lectores de pantalla.
+test('M11 el textarea del editor tiene etiqueta accesible', () => {
+  assert.match(html, /<label class="sr-only" for="code">Código C<\/label>/);
+  assert.match(html, /<textarea id="code"/);
+});
+
+// B11: al pasar de 100 líneas solo se recortan las líneas que sobran, no todo el pegado.
+const htmlC = fs.readFileSync(path.join(__dirname, '..', 'compilador-c', 'index.html'), 'utf8');
+const fuenteRecorte = (htmlC.match(/\n {4}function recortarPegado\([\s\S]*?\n {4}\}/) || [''])[0];
+const recortarPegado = new Function(`${fuenteRecorte}\nreturn recortarPegado;`)();
+
+test('B11 un pegado que se pasa de 100 líneas conserva las 100 primeras', () => {
+  const anterior = 'l\n'.repeat(99) + 'l';
+  const r = recortarPegado(anterior, anterior + 'X\nY', 100);
+  assert.strictEqual(r.texto.split('\n').length, 100);
+  assert.strictEqual(r.texto, anterior + 'X');
+});
+
+test('B11 un pegado en medio recorta el exceso y conserva el texto de alrededor', () => {
+  const anterior = 'a\nb';
+  const nuevo = 'a\n' + 'x\n'.repeat(200) + 'b';
+  const r = recortarPegado(anterior, nuevo, 100);
+  assert.strictEqual(r.texto.split('\n').length, 100);
+  assert.ok(r.texto.startsWith('a\n'));
+  assert.ok(r.texto.endsWith('b'));
+  assert.strictEqual(r.pos, 2 + ('x\n'.repeat(98) + 'x').length);
+});
+
+test('B11 un cambio dentro del límite no se toca', () => {
+  assert.deepStrictEqual(recortarPegado('a', 'ab', 100), { texto: 'ab', pos: 2 });
 });

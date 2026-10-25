@@ -15,4 +15,4 @@ Secuencia:
 8. Lote siguiente: el modelo del paso 6 lee resultados y propone la siguiente tanda; vuelve al paso 2.
 9. Auditoría: según la frecuencia configurada.
 
-Escribe el informe del lote en `docs/plugin-flujo/lotes/`.
+Escribe el informe del lote en `docs/plugin-flujo/lotes/` (la carpeta todavía no existe; créala al primer lote).

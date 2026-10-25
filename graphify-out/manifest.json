@@ -1,0 +1,956 @@
+{
+  ".claude/hooks/session-start.sh": {
+    "mtime": 1792884960.6649382,
+    "seen": 1792898564.7070029,
+    "ast_hash": "7dd8f0cdfc95a9dfe28b368a058959bb",
+    "semantic_hash": ""
+  },
+  ".claude/settings.json": {
+    "mtime": 1792886031.671394,
+    "seen": 1792898564.7070093,
+    "ast_hash": "27a5a382d006cb6fca981c71afaa64a4",
+    "semantic_hash": ""
+  },
+  ".claude/skills/i-have-adhd/agents/openai.yaml": {
+    "mtime": 1792885004.5650666,
+    "seen": 1792898564.7070122,
+    "ast_hash": "afc09bf6f7a29105d8bb76e95a27166a",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/metadata.json": {
+    "mtime": 1792885762.080288,
+    "seen": 1792898564.7070134,
+    "ast_hash": "5cd9ae4fc688353236c3b92e8f06dfcc",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-chapters/chapters.py": {
+    "mtime": 1792884604.5046375,
+    "seen": 1792898564.7070143,
+    "ast_hash": "13f7858ffa2056ca3275f83dc5d2a20e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-edit/deadair.py": {
+    "mtime": 1792884604.504728,
+    "seen": 1792898564.7070158,
+    "ast_hash": "c0df1c65f7bdffec3673ce5913521e52",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-package/title.py": {
+    "mtime": 1792884604.5047805,
+    "seen": 1792898564.707017,
+    "ast_hash": "e96e4c05769a48225e88a0b9a0011b90",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-retention/retention.py": {
+    "mtime": 1792884604.5048702,
+    "seen": 1792898564.7070177,
+    "ast_hash": "52fed2d9c5245f23a7cb28beeffb2ceb",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-script/hooks.json": {
+    "mtime": 1792884604.505001,
+    "seen": 1792898564.7070186,
+    "ast_hash": "db0e936b1818f584ca3716cc6aac910a",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-script/hookscore.py": {
+    "mtime": 1792884604.505026,
+    "seen": 1792898564.7070196,
+    "ast_hash": "564dd86023bdfc85a0cc3a84cd0996e1",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-viral/swipe.py": {
+    "mtime": 1792884604.5052583,
+    "seen": 1792898564.7070203,
+    "ast_hash": "d072b601f331554b5dcc9894df0f2ac2",
+    "semantic_hash": ""
+  },
+  ".omc/project-memory.json": {
+    "mtime": 1792896670.776755,
+    "seen": 1792898564.7070212,
+    "ast_hash": "952c079b17cab59d8c36e0915ae2f5e3",
+    "semantic_hash": ""
+  },
+  "compilador-c/interp.js": {
+    "mtime": 1792897617.3744261,
+    "seen": 1792898564.7070222,
+    "ast_hash": "c537daef7f1b2fce89b56bb11378ad0e",
+    "semantic_hash": ""
+  },
+  "compilador-c/interprete.js": {
+    "mtime": 1792897553.2771368,
+    "seen": 1792898564.7070231,
+    "ast_hash": "8d6b4ff9c278bf3f0e213546a52411e1",
+    "semantic_hash": ""
+  },
+  "compilador-c/lexico.js": {
+    "mtime": 1792897026.2199965,
+    "seen": 1792898564.7070239,
+    "ast_hash": "0fcd38c3786bed8286d9691c7df8a13d",
+    "semantic_hash": ""
+  },
+  "compilador-c/parser.js": {
+    "mtime": 1792897497.442093,
+    "seen": 1792898564.7070246,
+    "ast_hash": "706754e7c046bc6f67e6794cd90dee02",
+    "semantic_hash": ""
+  },
+  "herramientas/instalar-markitdown.sh": {
+    "mtime": 1792884960.6395655,
+    "seen": 1792898564.707025,
+    "ast_hash": "cc3008f70954c3f5987898b726ce5224",
+    "semantic_hash": ""
+  },
+  "plugins/flujo-desarrollo/.claude-plugin/plugin.json": {
+    "mtime": 1792884383.9652672,
+    "seen": 1792898564.7070262,
+    "ast_hash": "14bfebbf7872220ad39d6811d48323a1",
+    "semantic_hash": ""
+  },
+  "plugins/flujo-desarrollo/scripts/detectar-claves.sh": {
+    "mtime": 1792884383.9653504,
+    "seen": 1792898564.707027,
+    "ast_hash": "7710f482e783a8ed78fed77d9e5fb86f",
+    "semantic_hash": ""
+  },
+  "plugins/flujo-desarrollo/scripts/verificar.sh": {
+    "mtime": 1792884383.965449,
+    "seen": 1792898564.7070277,
+    "ast_hash": "ffbc1321b1820bad17e2fcd94347ffd2",
+    "semantic_hash": ""
+  },
+  "tests/arreglos.test.js": {
+    "mtime": 1792884383.9654837,
+    "seen": 1792898564.7070284,
+    "ast_hash": "2411e25d1ef26e954373b11a7683c6b2",
+    "semantic_hash": ""
+  },
+  "tests/builtins.test.js": {
+    "mtime": 1792898474.9048195,
+    "seen": 1792898564.7070293,
+    "ast_hash": "424a4dcad400178ed5fe7867ebccbfa4",
+    "semantic_hash": ""
+  },
+  "tests/casos.js": {
+    "mtime": 1792884383.9655998,
+    "seen": 1792898564.7070303,
+    "ast_hash": "4ecc76c050dbb353116b6eb8a48d36f4",
+    "semantic_hash": ""
+  },
+  "tests/errores.test.js": {
+    "mtime": 1792897497.2847846,
+    "seen": 1792898564.707031,
+    "ast_hash": "2fdf1ed33075d2f92f84c2ea04a453fe",
+    "semantic_hash": ""
+  },
+  "tests/expresiones.test.js": {
+    "mtime": 1792897220.4887748,
+    "seen": 1792898564.7070317,
+    "ast_hash": "bec194d4ce4a2c34a8ddcc7ed3d768ea",
+    "semantic_hash": ""
+  },
+  "tests/html.test.js": {
+    "mtime": 1792898343.564915,
+    "seen": 1792898564.707033,
+    "ast_hash": "be0cc83aa7733667639f225d8c8adc10",
+    "semantic_hash": ""
+  },
+  "tests/inicio.test.js": {
+    "mtime": 1792896917.148764,
+    "seen": 1792898564.7070336,
+    "ast_hash": "72bb7ed7d70347b040cf3a751f8a2e08",
+    "semantic_hash": ""
+  },
+  "tests/interfaz.test.js": {
+    "mtime": 1792898343.5656917,
+    "seen": 1792898564.7070343,
+    "ast_hash": "069ecac1dcdb49b754b493797778099b",
+    "semantic_hash": ""
+  },
+  "tests/lexico.test.js": {
+    "mtime": 1792897026.219687,
+    "seen": 1792898564.7070353,
+    "ast_hash": "450ad9ca60ace12877e9df568b927608",
+    "semantic_hash": ""
+  },
+  "tests/limite.test.js": {
+    "mtime": 1792884383.9655998,
+    "seen": 1792898564.7070363,
+    "ast_hash": "5dee159b2c7cda82d248169c544f2d06",
+    "semantic_hash": ""
+  },
+  "tests/medidores.test.js": {
+    "mtime": 1792884383.9655998,
+    "seen": 1792898564.707037,
+    "ast_hash": "a2a62af1de02e2af369c7266e54cd36d",
+    "semantic_hash": ""
+  },
+  "tests/modulos.test.js": {
+    "mtime": 1792884383.9655998,
+    "seen": 1792898564.7070377,
+    "ast_hash": "cd9e93d7f2ea8bde54a5ee3366c84924",
+    "semantic_hash": ""
+  },
+  "tests/plugin.test.js": {
+    "mtime": 1792896991.564138,
+    "seen": 1792898564.7070384,
+    "ast_hash": "703d8707348c1a8fb098925290a09df7",
+    "semantic_hash": ""
+  },
+  "tests/programas.test.js": {
+    "mtime": 1792884383.9655998,
+    "seen": 1792898564.707039,
+    "ast_hash": "dc95ba863003686e900ca2bdf300fd79",
+    "semantic_hash": ""
+  },
+  "tests/readme.test.js": {
+    "mtime": 1792896961.0164146,
+    "seen": 1792898564.70704,
+    "ast_hash": "ca28e41a81324c1d93d72319e74bf82f",
+    "semantic_hash": ""
+  },
+  "tests/tema-raiz.test.js": {
+    "mtime": 1792898328.6328144,
+    "seen": 1792898564.7070405,
+    "ast_hash": "4d1e3c19d387556416f8828264c6720c",
+    "semantic_hash": ""
+  },
+  "tests/traza.test.js": {
+    "mtime": 1792897617.2847888,
+    "seen": 1792898564.7070415,
+    "ast_hash": "f230c8e16525b1f77b207540bffcebb5",
+    "semantic_hash": ""
+  },
+  ".claude/CLAUDE.md": {
+    "mtime": 1792884940.4737318,
+    "seen": 1792898564.707042,
+    "ast_hash": "9b31786b637be3c13978bec4c2330752",
+    "semantic_hash": ""
+  },
+  ".claude/skills/auditoria/SKILL.md": {
+    "mtime": 1792896670.776755,
+    "seen": 1792898564.7070432,
+    "ast_hash": "97ff59100daee240d7ea9d8e69829ffd",
+    "semantic_hash": ""
+  },
+  ".claude/skills/find-skills/SKILL.md": {
+    "mtime": 1792885773.276226,
+    "seen": 1792898564.7070441,
+    "ast_hash": "62b297abdee9aea84c577ab2e04e1974",
+    "semantic_hash": ""
+  },
+  ".claude/skills/i-have-adhd/SKILL.md": {
+    "mtime": 1792885004.565,
+    "seen": 1792898564.707045,
+    "ast_hash": "7c350f95834a0bd18bc3779fb862614d",
+    "semantic_hash": ""
+  },
+  ".claude/skills/karpathy-guidelines/SKILL.md": {
+    "mtime": 1792884978.5984795,
+    "seen": 1792898564.707046,
+    "ast_hash": "568fe33228692e85543530ce376f695f",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/AGENTS.md": {
+    "mtime": 1792885762.079803,
+    "seen": 1792898564.707047,
+    "ast_hash": "fc8f9b0218d2173112a8418bf9d8abe7",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/README.md": {
+    "mtime": 1792885762.0802433,
+    "seen": 1792898564.7070506,
+    "ast_hash": "abb5236c535db0bf7ce6f38c8998bc47",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/SKILL.md": {
+    "mtime": 1792885762.080265,
+    "seen": 1792898564.7070513,
+    "ast_hash": "995a667ef0b53598f56ff897d9e4b334",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/_sections.md": {
+    "mtime": 1792885762.080381,
+    "seen": 1792898564.707052,
+    "ast_hash": "b8c110b45145ded6919562772afe067c",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/_template.md": {
+    "mtime": 1792885762.0803993,
+    "seen": 1792898564.707053,
+    "ast_hash": "a0d76a2f87f3f80e9a8f3a2a1054aaaf",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/advanced-effect-event-deps.md": {
+    "mtime": 1792885762.080412,
+    "seen": 1792898564.707054,
+    "ast_hash": "3a0e314bb9576bab61f68d5de5afaf3e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/advanced-event-handler-refs.md": {
+    "mtime": 1792885762.080424,
+    "seen": 1792898564.7070549,
+    "ast_hash": "f2a0d125f3773bfda91e187fa5bed48a",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/advanced-init-once.md": {
+    "mtime": 1792885762.080435,
+    "seen": 1792898564.7070556,
+    "ast_hash": "0100519098b834e69a3515657a39bdc9",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/advanced-use-latest.md": {
+    "mtime": 1792885762.080475,
+    "seen": 1792898564.7070565,
+    "ast_hash": "60309961293388c9b9e9fd4e0db344e3",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/async-api-routes.md": {
+    "mtime": 1792885762.0804894,
+    "seen": 1792898564.7070577,
+    "ast_hash": "344fa543b37e303660404e1ef3a4638b",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/async-cheap-condition-before-await.md": {
+    "mtime": 1792885762.0805016,
+    "seen": 1792898564.7070584,
+    "ast_hash": "96352f626f328e15a6213d485e29e36f",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/async-defer-await.md": {
+    "mtime": 1792885762.0806763,
+    "seen": 1792898564.7070591,
+    "ast_hash": "235a6b5760c2e4843d778167e462cb0e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/async-dependencies.md": {
+    "mtime": 1792885762.0806897,
+    "seen": 1792898564.7070603,
+    "ast_hash": "9c5622d97b20b9e0cb79455b4322061a",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/async-parallel.md": {
+    "mtime": 1792885762.0807009,
+    "seen": 1792898564.707061,
+    "ast_hash": "a0e06a8e9985cdff4ece0312d8ee35db",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/async-suspense-boundaries.md": {
+    "mtime": 1792885762.0807123,
+    "seen": 1792898564.7070618,
+    "ast_hash": "dbb2fc80721ca1ce32426f43219d314f",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/bundle-analyzable-paths.md": {
+    "mtime": 1792885762.0807457,
+    "seen": 1792898564.7070625,
+    "ast_hash": "8cfe6e284cafd2be33f09c6a1abc78fd",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/bundle-barrel-imports.md": {
+    "mtime": 1792885762.0807567,
+    "seen": 1792898564.7070634,
+    "ast_hash": "fcba301df7f11c6847dca5962ac78828",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/bundle-conditional.md": {
+    "mtime": 1792885762.0807672,
+    "seen": 1792898564.7070644,
+    "ast_hash": "585be2b6fc418c766e5b91cc2141d334",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/bundle-defer-third-party.md": {
+    "mtime": 1792885762.0807862,
+    "seen": 1792898564.7070653,
+    "ast_hash": "6d4d1d4fac411f724071428dd0bc93ba",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/bundle-dynamic-imports.md": {
+    "mtime": 1792885762.0807986,
+    "seen": 1792898564.707066,
+    "ast_hash": "72d89583306887810f67e9f7860f06af",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/bundle-preload.md": {
+    "mtime": 1792885762.080818,
+    "seen": 1792898564.7070673,
+    "ast_hash": "924ec7e7502ca042070326d38e88f8cd",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/client-event-listeners.md": {
+    "mtime": 1792885762.0808542,
+    "seen": 1792898564.7070682,
+    "ast_hash": "71062add972f9735348b7ae77e778eb8",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/client-localstorage-schema.md": {
+    "mtime": 1792885762.080866,
+    "seen": 1792898564.7070692,
+    "ast_hash": "982a459b07cbec2f8386e526b924c339",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/client-passive-event-listeners.md": {
+    "mtime": 1792885762.0808847,
+    "seen": 1792898564.7070699,
+    "ast_hash": "3853533fd5f49fa2fc98296f9c34d84f",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/client-swr-dedup.md": {
+    "mtime": 1792885762.0808978,
+    "seen": 1792898564.7070708,
+    "ast_hash": "e565fcba7836d339ca4707aad6fdaa4a",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-batch-dom-css.md": {
+    "mtime": 1792885762.0809178,
+    "seen": 1792898564.7070715,
+    "ast_hash": "869dbc06a931ccfb899b739316c348af",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-cache-function-results.md": {
+    "mtime": 1792885762.08093,
+    "seen": 1792898564.7070725,
+    "ast_hash": "5d641ce87ef753d59e3205244e2851a1",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-cache-property-access.md": {
+    "mtime": 1792885762.08094,
+    "seen": 1792898564.7070735,
+    "ast_hash": "5b4ae3cd853b92222a8fd8c8d8202426",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-cache-storage.md": {
+    "mtime": 1792885762.0809495,
+    "seen": 1792898564.7070744,
+    "ast_hash": "828f260566ff92df56089321fa41c116",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-combine-iterations.md": {
+    "mtime": 1792885762.0809808,
+    "seen": 1792898564.707075,
+    "ast_hash": "4f241532133637fee75304d40f016713",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-early-exit.md": {
+    "mtime": 1792885762.0809937,
+    "seen": 1792898564.7070758,
+    "ast_hash": "d300cb3e57255029e446bdfa49dc4074",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-flatmap-filter.md": {
+    "mtime": 1792885762.0810099,
+    "seen": 1792898564.7070765,
+    "ast_hash": "161d9d8b444e5ec9cb58bffb0e1b76cd",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-hoist-regexp.md": {
+    "mtime": 1792885762.081031,
+    "seen": 1792898564.7070773,
+    "ast_hash": "ced4609a5916db47bbaccfcc3f2dcdbb",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-index-maps.md": {
+    "mtime": 1792885762.0810437,
+    "seen": 1792898564.7070782,
+    "ast_hash": "db5bcfde02e1ce9f41d6ed1f5aafc8c5",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-length-check-first.md": {
+    "mtime": 1792885762.0810544,
+    "seen": 1792898564.707079,
+    "ast_hash": "2ba208759dd91578f1085c28e6a92ce9",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-min-max-loop.md": {
+    "mtime": 1792885762.0810642,
+    "seen": 1792898564.7070796,
+    "ast_hash": "82f654d27529dd80be7ae33d45dcdf8c",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-request-idle-callback.md": {
+    "mtime": 1792885762.0810764,
+    "seen": 1792898564.7070806,
+    "ast_hash": "91d7e7fca676efb7cecb4ccff1eaec01",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-set-map-lookups.md": {
+    "mtime": 1792885762.0810862,
+    "seen": 1792898564.7070816,
+    "ast_hash": "59a278e21ecd322bff566ba4ad7f5a30",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/js-tosorted-immutable.md": {
+    "mtime": 1792885762.0810962,
+    "seen": 1792898564.7070823,
+    "ast_hash": "fd0804905877b6b7b1858e5df1b5f3c4",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-activity.md": {
+    "mtime": 1792885762.0811064,
+    "seen": 1792898564.707083,
+    "ast_hash": "b66bde1377564aa196ba15fc94215cd3",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-animate-svg-wrapper.md": {
+    "mtime": 1792885762.0813117,
+    "seen": 1792898564.707084,
+    "ast_hash": "7301cbe48bf0e1c44934847861384d03",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-conditional-render.md": {
+    "mtime": 1792885762.0813258,
+    "seen": 1792898564.707085,
+    "ast_hash": "7aa6112d7544d55147e183b84add9c31",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-content-visibility.md": {
+    "mtime": 1792885762.0813375,
+    "seen": 1792898564.7070856,
+    "ast_hash": "a4ec0125d3a9d79ac2ab5f7a7b5b4d7d",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-hoist-jsx.md": {
+    "mtime": 1792885762.0813484,
+    "seen": 1792898564.7070863,
+    "ast_hash": "00519c11155c5c2a6f493d7980211a71",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-hydration-no-flicker.md": {
+    "mtime": 1792885762.0813591,
+    "seen": 1792898564.7070878,
+    "ast_hash": "a33ebc96d26525f94c460342d913e47a",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-hydration-suppress-warning.md": {
+    "mtime": 1792885762.081392,
+    "seen": 1792898564.7070887,
+    "ast_hash": "23bc895f5697c19a59712bf19474ec12",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-resource-hints.md": {
+    "mtime": 1792885762.0814111,
+    "seen": 1792898564.7070897,
+    "ast_hash": "a612b2d1d86d1b8205b92ff7dfd81eb8",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-script-defer-async.md": {
+    "mtime": 1792885762.0814302,
+    "seen": 1792898564.7070904,
+    "ast_hash": "d62596aed565dd3ad7bddd38bc8f7798",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-svg-precision.md": {
+    "mtime": 1792885762.081442,
+    "seen": 1792898564.707091,
+    "ast_hash": "1b880754ee449c52ccc725481f8b2e90",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rendering-usetransition-loading.md": {
+    "mtime": 1792885762.081452,
+    "seen": 1792898564.707092,
+    "ast_hash": "3cea04ec76a76183cebc6571ac6365a2",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-defer-reads.md": {
+    "mtime": 1792885762.0814893,
+    "seen": 1792898564.707093,
+    "ast_hash": "2b754062eb7b203632859f6515ed3561",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-dependencies.md": {
+    "mtime": 1792885762.0815024,
+    "seen": 1792898564.7070937,
+    "ast_hash": "ad0e42cd0616237f62f8a5abbc2138bc",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-derived-state-no-effect.md": {
+    "mtime": 1792885762.0815148,
+    "seen": 1792898564.7070944,
+    "ast_hash": "c83ba3c8ea58015fd30072790a4959c4",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-derived-state.md": {
+    "mtime": 1792885762.0815263,
+    "seen": 1792898564.7070956,
+    "ast_hash": "fadd31941e355786cb0cc7bba3c672fd",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-functional-setstate.md": {
+    "mtime": 1792885762.0815678,
+    "seen": 1792898564.7070963,
+    "ast_hash": "188c0b949d23c11885914c573f4a770a",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-lazy-state-init.md": {
+    "mtime": 1792885762.0815887,
+    "seen": 1792898564.707097,
+    "ast_hash": "6f9fc3d826cea2ca484912256149b077",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-memo-with-default-value.md": {
+    "mtime": 1792885762.0815997,
+    "seen": 1792898564.7070978,
+    "ast_hash": "9bfa45660e0a4d4f180e1d12d9ed44ea",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-memo.md": {
+    "mtime": 1792885762.0816102,
+    "seen": 1792898564.7070987,
+    "ast_hash": "f0decabf1e4cf032c36f0977c81167b7",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-move-effect-to-event.md": {
+    "mtime": 1792885762.0816224,
+    "seen": 1792898564.7070994,
+    "ast_hash": "599463fe624afd8822ba2bfa7c0138d5",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-no-inline-components.md": {
+    "mtime": 1792885762.0816479,
+    "seen": 1792898564.7071002,
+    "ast_hash": "713855e0060cfe2ce549d08ea77e1af6",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-simple-expression-in-memo.md": {
+    "mtime": 1792885762.0816603,
+    "seen": 1792898564.7071006,
+    "ast_hash": "42c37552160cff86a0fcbd93a27aa74e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-split-combined-hooks.md": {
+    "mtime": 1792885762.0816758,
+    "seen": 1792898564.7071016,
+    "ast_hash": "b7485878ff82ce8468078a31fc1b7f19",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-transitions.md": {
+    "mtime": 1792885762.081688,
+    "seen": 1792898564.7071023,
+    "ast_hash": "3f275bbfb966fcb39c554ad959fdf016",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-use-deferred-value.md": {
+    "mtime": 1792885762.08171,
+    "seen": 1792898564.707103,
+    "ast_hash": "913dc783397142c25ec997b5dc11245b",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/rerender-use-ref-transient-values.md": {
+    "mtime": 1792885762.081727,
+    "seen": 1792898564.707104,
+    "ast_hash": "24d2e82617e2da4207afaf049e1314f3",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-after-nonblocking.md": {
+    "mtime": 1792885762.081738,
+    "seen": 1792898564.7071044,
+    "ast_hash": "c88a79384f87826bf1b20aa3637093a5",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-auth-actions.md": {
+    "mtime": 1792885762.0817485,
+    "seen": 1792898564.7071054,
+    "ast_hash": "d8691820d666e5dd9094ccc6996398e3",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-cache-lru.md": {
+    "mtime": 1792885762.0817595,
+    "seen": 1792898564.707106,
+    "ast_hash": "723195ea460bfbc4d43b4eb0c47b246b",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-cache-react.md": {
+    "mtime": 1792885762.081779,
+    "seen": 1792898564.7071068,
+    "ast_hash": "bc168ee66c4378854c7aa23cb9ca1369",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-dedup-props.md": {
+    "mtime": 1792885762.081959,
+    "seen": 1792898564.7071075,
+    "ast_hash": "86bf6f2d562ca98bca778a5b9d2f0251",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-hoist-static-io.md": {
+    "mtime": 1792885762.0819747,
+    "seen": 1792898564.7071083,
+    "ast_hash": "05789c4ba35f68cc0ed6deba3078f7ab",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-no-shared-module-state.md": {
+    "mtime": 1792885762.082148,
+    "seen": 1792898564.7071092,
+    "ast_hash": "7733faf82c146008e8f1c65660bac4bb",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-parallel-fetching.md": {
+    "mtime": 1792885762.0821621,
+    "seen": 1792898564.70711,
+    "ast_hash": "1a36cf0b49a1a498fc1150afbf7a42c2",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-parallel-nested-fetching.md": {
+    "mtime": 1792885762.0821743,
+    "seen": 1792898564.707111,
+    "ast_hash": "eaa7835a15d41842406acc34002f0d6c",
+    "semantic_hash": ""
+  },
+  ".claude/skills/react-best-practices/rules/server-serialization.md": {
+    "mtime": 1792885762.0821862,
+    "seen": 1792898564.7071116,
+    "ast_hash": "e6d34426614852685f43609dd9e3b250",
+    "semantic_hash": ""
+  },
+  ".claude/skills/router/SKILL.md": {
+    "mtime": 1792896670.776755,
+    "seen": 1792898564.7071126,
+    "ast_hash": "3dab5811c7db981d1a5ec571fd0aaf1f",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-audit/SKILL.md": {
+    "mtime": 1792884604.5045376,
+    "seen": 1792898564.707113,
+    "ast_hash": "960363f1d3039df2dac682db797038dc",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-chapters/SKILL.md": {
+    "mtime": 1792884604.504616,
+    "seen": 1792898564.707114,
+    "ast_hash": "e383aa4370f83b9bf8c96e7ed4331b3e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-comment/SKILL.md": {
+    "mtime": 1792884604.504674,
+    "seen": 1792898564.7071147,
+    "ast_hash": "0352cefa1ec5494a089cbbe3b32065d3",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-edit/SKILL.md": {
+    "mtime": 1792884604.5047083,
+    "seen": 1792898564.7071154,
+    "ast_hash": "b421a7a04268156cace16a6b84b9bde1",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-package/SKILL.md": {
+    "mtime": 1792884604.5047626,
+    "seen": 1792898564.7071164,
+    "ast_hash": "448676d6b9fce42328bc85fcf78dd6be",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-plan/SKILL.md": {
+    "mtime": 1792884604.504818,
+    "seen": 1792898564.707117,
+    "ast_hash": "cbdf6192d14edbaea1abd58baa93a8aa",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-retention/SKILL.md": {
+    "mtime": 1792884604.5048518,
+    "seen": 1792898564.7071178,
+    "ast_hash": "3bf402a677506f15c8e004931fb9c805",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-script/SKILL.md": {
+    "mtime": 1792884604.5049417,
+    "seen": 1792898564.7071185,
+    "ast_hash": "4455d29fe7e0e8889c9d8c61f1cd013d",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-seo/SKILL.md": {
+    "mtime": 1792884604.505158,
+    "seen": 1792898564.7071195,
+    "ast_hash": "d17f25fb64b99be72c1aafb2c780df27",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-shorts/SKILL.md": {
+    "mtime": 1792884604.5051975,
+    "seen": 1792898564.7071202,
+    "ast_hash": "71eb864ef8a6c33cf99abfaa67f86222",
+    "semantic_hash": ""
+  },
+  ".claude/skills/yt-viral/SKILL.md": {
+    "mtime": 1792884604.505237,
+    "seen": 1792898564.7071211,
+    "ast_hash": "d758be7cf9098d8a64b11b83c3f35e45",
+    "semantic_hash": ""
+  },
+  ".claude/youtube/voice.md": {
+    "mtime": 1792884604.5119,
+    "seen": 1792898564.7071218,
+    "ast_hash": "c93aa3fa26c47f99b6ee15252e5b740e",
+    "semantic_hash": ""
+  },
+  ".opencode/commands/auditoria.md": {
+    "mtime": 1792896670.778161,
+    "seen": 1792898564.7071228,
+    "ast_hash": "5d6b84cde1ba745e6bb3ef1793a690c8",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1792896670.778161,
+    "seen": 1792898564.7071235,
+    "ast_hash": "07664685fd754c66a53256b9a7aa9bb3",
+    "semantic_hash": ""
+  },
+  "AUDITORIA.md": {
+    "mtime": 1792898555.492732,
+    "seen": 1792898564.7071242,
+    "ast_hash": "5fc80df46f5879d39330ffe898511756",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1792896670.778161,
+    "seen": 1792898564.7071252,
+    "ast_hash": "9093f31ec7c8237af4f4f767319c407a",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1792896922.9509652,
+    "seen": 1792898564.707126,
+    "ast_hash": "1ab5e3744ec8d6bb90b1d898d05826cf",
+    "semantic_hash": ""
+  },
+  "compilador-c/index.html": {
+    "mtime": 1792898333.7873247,
+    "seen": 1792898564.7071269,
+    "ast_hash": "65642d4a29d8b4b38129b5ee88dde787",
+    "semantic_hash": ""
+  },
+  "docs/agent-skills-addyosmani.md": {
+    "mtime": 1792884960.6429594,
+    "seen": 1792898564.7071276,
+    "ast_hash": "28c18e973daa75379595e830019c0688",
+    "semantic_hash": ""
+  },
+  "docs/arscontexta.md": {
+    "mtime": 1792885237.2587922,
+    "seen": 1792898564.7071283,
+    "ast_hash": "6483e6cef9135622f8f6d010b9f72f88",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/2026-10-24.md": {
+    "mtime": 1792896670.778161,
+    "seen": 1792898564.707129,
+    "ast_hash": "3487fe0bc9f756bd106d499078ece7c4",
+    "semantic_hash": ""
+  },
+  "docs/autoharness.md": {
+    "mtime": 1792885237.2572806,
+    "seen": 1792898564.70713,
+    "ast_hash": "466125ef5ca7d00bfa87523afafe41c4",
+    "semantic_hash": ""
+  },
+  "docs/claude-code-setup.md": {
+    "mtime": 1792886031.6774986,
+    "seen": 1792898564.7071307,
+    "ast_hash": "0b9e8072faf3a78043fb38f4ace1fdb3",
+    "semantic_hash": ""
+  },
+  "docs/claude-mem.md": {
+    "mtime": 1792885147.667847,
+    "seen": 1792898564.7071311,
+    "ast_hash": "4b0b6070c61f73e4113a3de0061c651f",
+    "semantic_hash": ""
+  },
+  "docs/claude-octopus.md": {
+    "mtime": 1792885115.5223572,
+    "seen": 1792898564.7071319,
+    "ast_hash": "0adc3d31e25112114873f2c68c2645f1",
+    "semantic_hash": ""
+  },
+  "docs/find-skills.md": {
+    "mtime": 1792885773.283107,
+    "seen": 1792898564.7071326,
+    "ast_hash": "de5e54cffd2c925462f91caf2f1cd122",
+    "semantic_hash": ""
+  },
+  "docs/graphify.md": {
+    "mtime": 1792884960.6415472,
+    "seen": 1792898564.7071335,
+    "ast_hash": "7a2a8d158ccd38c6ce0f8c9f0ae3fb8a",
+    "semantic_hash": ""
+  },
+  "docs/i-have-adhd.md": {
+    "mtime": 1792885010.938914,
+    "seen": 1792898564.7071345,
+    "ast_hash": "0d3b0c5d55383f766ff0292a4f777fbe",
+    "semantic_hash": ""
+  },
+  "docs/karpathy.md": {
+    "mtime": 1792884978.604915,
+    "seen": 1792898564.7071352,
+    "ast_hash": "b4c374d91c97743e96019b92a01567b1",
+    "semantic_hash": ""
+  },
+  "docs/markitdown.md": {
+    "mtime": 1792884486.087209,
+    "seen": 1792898564.7071357,
+    "ast_hash": "8c2b38d2213b607eedaf79514f5048cd",
+    "semantic_hash": ""
+  },
+  "docs/ponytail.md": {
+    "mtime": 1792884604.5415215,
+    "seen": 1792898564.7071366,
+    "ast_hash": "5d4e36a4c8a5d957f2925e9d2566e29d",
+    "semantic_hash": ""
+  },
+  "docs/pro-workflow.md": {
+    "mtime": 1792885237.2556443,
+    "seen": 1792898564.7071373,
+    "ast_hash": "364873507238ce507adcf94466b4dfd1",
+    "semantic_hash": ""
+  },
+  "docs/react-best-practices.md": {
+    "mtime": 1792885762.0892031,
+    "seen": 1792898564.707138,
+    "ast_hash": "358fed7027a1e56e641bc76581c5f378",
+    "semantic_hash": ""
+  },
+  "docs/task-observer.md": {
+    "mtime": 1792886193.0492287,
+    "seen": 1792898564.7071388,
+    "ast_hash": "c29cfc4e233926b8fcc8c027e82935e4",
+    "semantic_hash": ""
+  },
+  "docs/youtube-agent-skill.md": {
+    "mtime": 1792884604.5399015,
+    "seen": 1792898564.7071395,
+    "ast_hash": "ad804034714391749bdaf38aba99a62f",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1792896975.2448895,
+    "seen": 1792898564.7071404,
+    "ast_hash": "6518db5275427bdbc808513223d24b8c",
+    "semantic_hash": ""
+  },
+  "plugins/flujo-desarrollo/README.md": {
+    "mtime": 1792896991.6518037,
+    "seen": 1792898564.7071412,
+    "ast_hash": "0e971cefab21e21afbbe6152a23efeff",
+    "semantic_hash": ""
+  },
+  "plugins/flujo-desarrollo/commands/auditar.md": {
+    "mtime": 1792896991.6523337,
+    "seen": 1792898564.7071416,
+    "ast_hash": "eba8694d2405fbceec6e141e1df33bf5",
+    "semantic_hash": ""
+  },
+  "plugins/flujo-desarrollo/commands/configurar.md": {
+    "mtime": 1792896991.6521018,
+    "seen": 1792898564.7071424,
+    "ast_hash": "fd51f3b4e9b6870558002b939071988b",
+    "semantic_hash": ""
+  },
+  "plugins/flujo-desarrollo/commands/ejecutar.md": {
+    "mtime": 1792896991.6525004,
+    "seen": 1792898564.707143,
+    "ast_hash": "48ea043b6ff1572217204e299b5479f3",
+    "semantic_hash": ""
+  },
+  "plugins/flujo-desarrollo/skills/flujo-desarrollo/SKILL.md": {
+    "mtime": 1792884383.9654837,
+    "seen": 1792898564.707144,
+    "ast_hash": "dec7ebc7af9aa5acdfb47e2044f420d0",
+    "semantic_hash": ""
+  }
+}

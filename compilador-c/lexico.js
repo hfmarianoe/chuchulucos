@@ -112,7 +112,7 @@
           if (this.src[this.pos] === '\\') {
             this.pos++;
             const esc = this.src[this.pos];
-            const map = { 'n': '\n', 't': '\t', '\\': '\\', '"': '"', "'": "'", '0': '\0' };
+            const map = { 'n': 10, 't': 9, '\\': 92, '"': 34, "'": 39, '0': 0 };
             val = map[esc] ?? esc.charCodeAt(0);
             this.pos++;
           } else {
