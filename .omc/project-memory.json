@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1792894435159,
+  "projectRoot": "C:\\Users\\hfmar\\proyectos\\chuchulucos",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "compilador-c": {
+      "path": "compilador-c",
+      "purpose": null,
+      "fileCount": 5,
+      "lastAccessed": 1792894434963,
+      "keyFiles": [
+        "index.html",
+        "interp.js",
+        "interprete.js",
+        "lexico.js",
+        "parser.js"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 16,
+      "lastAccessed": 1792894434965,
+      "keyFiles": [
+        "agent-skills-addyosmani.md",
+        "arscontexta.md",
+        "autoharness.md",
+        "claude-code-setup.md",
+        "claude-mem.md"
+      ]
+    },
+    "herramientas": {
+      "path": "herramientas",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1792894434968,
+      "keyFiles": [
+        "instalar-markitdown.sh"
+      ]
+    },
+    "plugins": {
+      "path": "plugins",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1792894434969,
+      "keyFiles": []
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 14,
+      "lastAccessed": 1792894434971,
+      "keyFiles": [
+        "arreglos.test.js",
+        "builtins.test.js",
+        "casos.js",
+        "errores.test.js",
+        "expresiones.test.js"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "AUDITORIA.md",
+      "accessCount": 5,
+      "lastAccessed": 1792363660817,
+      "type": "file"
+    },
+    {
+      "path": "compilador-c/interp.js",
+      "accessCount": 2,
+      "lastAccessed": 1792349686037,
+      "type": "file"
+    },
+    {
+      "path": ".claude/skills/router/SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1792895749721,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
