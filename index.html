@@ -60,7 +60,11 @@
       return temaSistema.matches ? 'dark' : 'light';
     }
     function pintarTema() {
-      themeBtn.setAttribute('aria-pressed', String(temaEfectivo() === 'dark'));
+      const oscuro = temaEfectivo() === 'dark';
+      const nombre = oscuro ? 'Tema oscuro' : 'Tema claro';
+      themeBtn.setAttribute('aria-pressed', String(oscuro));
+      themeBtn.setAttribute('aria-label', nombre);
+      themeBtn.textContent = '◐ ' + nombre;
     }
     themeBtn.addEventListener('click', () => {
       const nuevo = temaEfectivo() === 'dark' ? 'light' : 'dark';

@@ -21,3 +21,14 @@ test('B5 la página principal lee y guarda la misma clave de tema, dentro de try
 test('B5 la hoja de estilos define foco visible con tokens', () => {
   assert.match(estilo, /:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--accent-text\)/);
 });
+
+// B12: el botón de tema debe mostrar el tema activo, no siempre "Tema oscuro".
+for (const [rel, sangria] of [['index.html', '      '], ['compilador-c/index.html', '        ']]) {
+  test(`B12 ${rel}: pintarTema() actualiza el texto y el nombre accesible del botón`, () => {
+    const html = fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
+    const cuerpo = html.match(/function pintarTema\(\) \{([\s\S]*?)\n\s*\}/);
+    assert.ok(cuerpo, 'no se encontró pintarTema()');
+    assert.match(cuerpo[1], /textContent\s*=/);
+    assert.match(cuerpo[1], /setAttribute\('aria-label'/);
+  });
+}
