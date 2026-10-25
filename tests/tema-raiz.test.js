@@ -32,3 +32,10 @@ for (const [rel, sangria] of [['index.html', '      '], ['compilador-c/index.htm
     assert.match(cuerpo[1], /setAttribute\('aria-label'/);
   });
 }
+
+// B13: el enlace a la app de C debe verse como enlace, con clase propia.
+test('B13 el enlace al compilador usa una clase propia con color de acento y subrayado', () => {
+  assert.match(raiz, /<a class="enlace-app" href="compilador-c\/index\.html">Abrir el compilador de C<\/a>/);
+  assert.match(estilo, /\.enlace-app\s*\{[^}]*color:\s*var\(--accent-text\)/);
+  assert.match(estilo, /\.enlace-app\s*\{[^}]*text-decoration:\s*underline/);
+});
