@@ -64,3 +64,30 @@ test('B9 un %s sin argumento da error claro, no "undefined"', () => {
   assert.match(r.error, /falta un argumento para %s/);
   assert.strictEqual(r.errorLine, 1);
 });
+
+// B17: un caso por hallazgo de la auditoría 2026-10-24, con las salidas comprobadas contra gcc.
+test("B17 '\\n' y '\\t' valen 10 y 9 dentro de printf", () => {
+  assert.strictEqual(salida("int main(){ printf(\"%d|%d\", '\\n', '\\t'); return 0; }"), '10|9');
+});
+
+test('B17 asignación compuesta float: x /= 3 con x float da 0.666667', () => {
+  assert.strictEqual(salida('int main(){ float x = 2.0; x /= 3; printf("%f", x); return 0; }'), '0.666667');
+});
+
+test('B17 retorno float en una expresión: mitad()/2 da 0.750000', () => {
+  assert.strictEqual(salida('float mitad() { return 1.5; }\nint main(){ printf("%f", mitad() / 2); return 0; }'), '0.750000');
+});
+
+test('B17 un prototipo da error claro del intérprete', () => {
+  const r = run('int f(int x);\nint main(){ return 0; }');
+  assert.strictEqual(r.ok, false);
+  assert.match(r.error, /Prototipo de 'f' no soportado/);
+});
+
+test('B17 el ancho de printf rellena con espacios a la izquierda', () => {
+  assert.strictEqual(salida('int main(){ printf("[%5d]", 42); return 0; }'), '[   42]');
+});
+
+test('B17 la precisión de printf redondea con los decimales pedidos', () => {
+  assert.strictEqual(salida('int main(){ printf("%.2f", 3.14159); return 0; }'), '3.14');
+});
