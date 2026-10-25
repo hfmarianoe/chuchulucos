@@ -514,6 +514,30 @@
         return texto.split('\n').length;
     }
 
+    // Recorta un cambio que se pasa del límite de líneas: conserva lo anterior y solo quita las líneas que sobran.
+    function recortarPegado(anterior, nuevo, maxLineas) {
+        let p = 0;
+        const minLen = Math.min(anterior.length, nuevo.length);
+        while (p < minLen && anterior[p] === nuevo[p]) p++;
+        let s = 0;
+        while (s < minLen - p && anterior[anterior.length - 1 - s] === nuevo[nuevo.length - 1 - s]) s++;
+        const insertado = nuevo.slice(p, nuevo.length - s);
+        const base = anterior.slice(0, p) + anterior.slice(anterior.length - s);
+        const saltosPermitidos = Math.max(0, maxLineas - base.split('\n').length);
+        let recortado = insertado;
+        let saltos = 0;
+        for (let i = 0; i < insertado.length; i++) {
+            if (insertado[i] === '\n' && ++saltos > saltosPermitidos) {
+                recortado = insertado.slice(0, i);
+                break;
+            }
+        }
+        return {
+            texto: anterior.slice(0, p) + recortado + anterior.slice(anterior.length - s),
+            pos: p + recortado.length
+        };
+    }
+
     function actualizarCapacidad() {
         const n = contarLineas(code.value);
         const proporcion = n / MAX_LINEAS;
@@ -550,10 +574,11 @@ int main() {
     // Eventos
     code.addEventListener('input', () => {
         if (contarLineas(code.value) > MAX_LINEAS) {
-            // Se pasó del tope (escritura o pegado): volver al último código válido.
-            const pos = Math.max(0, code.selectionStart - 1);
-            code.value = ultimoCodigoValido;
-            code.selectionStart = code.selectionEnd = Math.min(pos, code.value.length);
+            // Se pasó del tope (escritura o pegado): quitar solo las líneas que sobran.
+            const recorte = recortarPegado(ultimoCodigoValido, code.value, MAX_LINEAS);
+            code.value = recorte.texto;
+            code.selectionStart = code.selectionEnd = recorte.pos;
+            statusDisplay.textContent = `Límite de ${MAX_LINEAS} líneas: se recortó lo que sobraba.`;
         }
         ultimoCodigoValido = code.value;
         actualizarCapacidad();

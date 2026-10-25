@@ -74,3 +74,29 @@ test('M11 el textarea del editor tiene etiqueta accesible', () => {
   assert.match(html, /<label class="sr-only" for="code">Código C<\/label>/);
   assert.match(html, /<textarea id="code"/);
 });
+
+// B11: al pasar de 100 líneas solo se recortan las líneas que sobran, no todo el pegado.
+const htmlC = fs.readFileSync(path.join(__dirname, '..', 'compilador-c', 'index.html'), 'utf8');
+const fuenteRecorte = (htmlC.match(/\n {4}function recortarPegado\([\s\S]*?\n {4}\}/) || [''])[0];
+const recortarPegado = new Function(`${fuenteRecorte}\nreturn recortarPegado;`)();
+
+test('B11 un pegado que se pasa de 100 líneas conserva las 100 primeras', () => {
+  const anterior = 'l\n'.repeat(99) + 'l';
+  const r = recortarPegado(anterior, anterior + 'X\nY', 100);
+  assert.strictEqual(r.texto.split('\n').length, 100);
+  assert.strictEqual(r.texto, anterior + 'X');
+});
+
+test('B11 un pegado en medio recorta el exceso y conserva el texto de alrededor', () => {
+  const anterior = 'a\nb';
+  const nuevo = 'a\n' + 'x\n'.repeat(200) + 'b';
+  const r = recortarPegado(anterior, nuevo, 100);
+  assert.strictEqual(r.texto.split('\n').length, 100);
+  assert.ok(r.texto.startsWith('a\n'));
+  assert.ok(r.texto.endsWith('b'));
+  assert.strictEqual(r.pos, 2 + ('x\n'.repeat(98) + 'x').length);
+});
+
+test('B11 un cambio dentro del límite no se toca', () => {
+  assert.deepStrictEqual(recortarPegado('a', 'ab', 100), { texto: 'ab', pos: 2 });
+});
