@@ -128,3 +128,25 @@ test('M5 #include123 no se acepta como directiva', () => {
   assert.match(r.error, /'#' suelto/);
   assert.strictEqual(r.errorLine, 1);
 });
+
+// M7: los literales de carácter con escape valen su código numérico.
+const codigoDe = (lit) => run(`int main(){ char c = ${lit}; printf("%d", c); return 0; }`).output;
+test('M7 los escapes de carácter valen su código', () => {
+  assert.strictEqual(codigoDe("'\\n'"), '10');
+  assert.strictEqual(codigoDe("'\\t'"), '9');
+  assert.strictEqual(codigoDe("'\\0'"), '0');
+  assert.strictEqual(codigoDe("'\\\\'"), '92');
+  assert.strictEqual(codigoDe("'\\''"), '39');
+  assert.strictEqual(codigoDe("'\\\"'"), '34');
+});
+
+test('M7 putchar con el escape de salto de línea escribe un salto real', () => {
+  const r = run('int main(){ putchar(\'\\n\'); return 0; }');
+  assert.strictEqual(r.ok, true, r.error);
+  assert.strictEqual(r.output, '\n');
+});
+
+test('M7 las cadenas con escapes siguen funcionando', () => {
+  const r = run('int main(){ printf("a\\tb\\n"); return 0; }');
+  assert.strictEqual(r.output, 'a\tb\n');
+});
